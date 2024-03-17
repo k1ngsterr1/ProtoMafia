@@ -1,4 +1,4 @@
-import NavigationBar from "../components/NavigationBar4";
+import NavigationBar1 from "../components/NavigationBar1";
 import FrameComponent from "../components/FrameComponent8";
 import ContainerWithThreeDividers from "../components/ContainerWithThreeDividers";
 import ListBestStudents from "../components/ListBestStudents";
@@ -10,7 +10,7 @@ const Frame = () => {
     <div className={styles.div}>
       <div className={styles.mainFigmaComponent} />
       <h1 className={styles.mafia}>MAFIA</h1>
-      <NavigationBar />
+      <NavigationBar1 />
       <div className={styles.containerWithChevron}>
         <div className={styles.containerWithChevronInner}>
           <div className={styles.parent}>

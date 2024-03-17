@@ -5,6 +5,7 @@ import {
   useParticipant,
 } from "@videosdk.live/react-sdk";
 import ReactPlayer from "react-player";
+import NavigationBar1 from "../components/NavigationBar1";
 
 function ParticipantView(props) {
     const micRef = useRef(null);
@@ -76,6 +77,7 @@ function MeetingView() {
   };
 
   return (
+    <>
     <div className="container">
       {joined && joined == "JOINED" ? (
         <div>
@@ -92,10 +94,12 @@ function MeetingView() {
         <button onClick={joinMeeting}>Join the meeting</button>
       )}
     </div>
+    </>
   );
 }
 const OnlineMeeting = () => {
  return (
+    <>
   <MeetingProvider
   config={{
     meetingId: "p1sw-t0u7-mu1l",
@@ -107,6 +111,7 @@ const OnlineMeeting = () => {
 >
   <MeetingView />
 </MeetingProvider>
+</>
  )
 };
 

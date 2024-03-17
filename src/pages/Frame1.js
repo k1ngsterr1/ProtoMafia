@@ -1,4 +1,4 @@
-import NavigationBar2 from "../components/NavigationBar2";
+import NavigationBar1 from "../components/NavigationBar1";
 import FrameComponent6 from "../components/FrameComponent6";
 import FrameComponent5 from "../components/FrameComponent5";
 import Footer3 from "../components/Footer2";
@@ -11,7 +11,7 @@ const Frame = () => {
       <h1 className={styles.mafia}>MAFIA</h1>
       <img className={styles.image5Icon} alt="" src="/image-5@2x.png" />
       <div className={styles.navigationBarParent}>
-        <NavigationBar2 />
+        <NavigationBar1 />
         <FrameComponent6 />
       </div>
       <FrameComponent5 />

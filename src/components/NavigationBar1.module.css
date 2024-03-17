@@ -6,6 +6,12 @@
   flex-shrink: 0;
   min-height: 40px;
 }
+
+a:hover {
+  text-decoration: underline;
+  color: var(--main);
+}
+
 .div {
   position: relative;
   display: inline-block;
@@ -92,6 +98,21 @@
   overflow: hidden;
   flex-shrink: 0;
 }
+
+.settingSvgrepocomIcon {
+  animation: rotate 5s linear infinite; /* Время анимации 5 секунд, линейное сглаживание, бесконечное повторение */
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg); /* Начальный угол вращения 0 градусов */
+  }
+  to {
+    transform: rotate(360deg); /* Конечный угол вращения 360 градусов (полный оборот) */
+  }
+}
+
+
 .createGameButton,
 .navigationBar {
   align-self: stretch;

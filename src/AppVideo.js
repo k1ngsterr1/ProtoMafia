@@ -5,6 +5,7 @@ import { MeetingAppProvider } from "./MeetingAppContextDef";
 import { MeetingContainer } from "./meeting/MeetingContainer";
 import { LeaveScreen } from "./components/screens/LeaveScreen";
 import { JoiningScreen } from "./components/screens/JoiningScreen"
+import NavigationBar1 from "./components/NavigationBar1";
 
 function OnlineApp() {
   const [token, setToken] = useState("");
@@ -31,6 +32,7 @@ function OnlineApp() {
 
   return (
     <>
+    <NavigationBar1></NavigationBar1>
       <MeetingAppProvider>
         {isMeetingStarted ? (
 

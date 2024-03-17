@@ -12,11 +12,11 @@ const InputProvider = () => {
             <p className={styles.time}>TIME</p>
           </div>
           <div className={styles.variableHolder}>
-            <div className={styles.div}>Главная</div>
-            <div className={styles.div1}>Об игре</div>
-            <div className={styles.div2}>Онлайн мафия</div>
+            <a href="/"><div className={styles.div}>Главная</div></a>
+            <a href="/1"><div className={styles.div1}>Об игре</div></a>
+            <a href="/OnlineApp"><div className={styles.div2}>Онлайн мафия</div></a>
             <div className={styles.div3}>Расписание</div>
-            <div className={styles.div4}>Рейтинг</div>
+            <a href="/2"><div className={styles.div4}>Рейтинг</div></a>
             <div className={styles.arithmeticOperator}>+7 700 100 11 11</div>
           </div>
           <div className={styles.logicOperator}>
@@ -26,18 +26,18 @@ const InputProvider = () => {
                 virtual={false}
                 showArrow={false}
               >{` `}</Select>
-              <img
+              <a href="/signup"><img
                 className={styles.userIcon}
                 loading="lazy"
                 alt=""
                 src="/user.svg"
-              />
+              /></a>
             </div>
           </div>
         </header>
         <img className={styles.image6Icon} alt="" src="/image-6@2x.png" />
         <h1 className={styles.mafia}>Mafia</h1>
-        <div className={styles.div5}>Играть</div>
+        <a href="/OnlineApp"><div className={styles.div5}>Играть</div></a>
       </div>
     </div>
   );
