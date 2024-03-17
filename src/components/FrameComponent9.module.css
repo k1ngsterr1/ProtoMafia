@@ -1,0 +1,77 @@
+.frameChild {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.icon {
+  height: 10px;
+  width: 8.8px;
+  position: relative;
+  object-fit: contain;
+}
+.downArrowSm,
+.downArrowSm1 {
+  display: flex;
+  flex-direction: row;
+}
+.downArrowSm1 {
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-6xs) var(--padding-5xs);
+  box-sizing: border-box;
+  width: 24px;
+}
+.downArrowSm {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.div {
+  position: relative;
+}
+.downArrowSmParent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-9xs);
+}
+.div1 {
+  position: relative;
+  font-size: var(--text-body-size);
+  color: var(--color-gray-1400);
+}
+.ellipseParent,
+.frameParent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+}
+.ellipseParent {
+  height: 260px;
+  width: 280px;
+  background-color: var(--white);
+  box-shadow: -2px -2px 6px rgba(0, 0, 0, 0.05), 2px 2px 6px rgba(0, 0, 0, 0.05);
+  padding: var(--padding-31xl) var(--padding-xl) var(--padding-18xl);
+  box-sizing: border-box;
+  gap: var(--gap-xl);
+  min-width: 280px;
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--color-gray-600);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 1050px) {
+  .ellipseParent {
+    flex: 1;
+  }
+}
+@media screen and (max-width: 450px) {
+  .div {
+    font-size: var(--font-size-base);
+  }
+}

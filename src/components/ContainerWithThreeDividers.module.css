@@ -1,0 +1,203 @@
+.listOfThe {
+  position: relative;
+  text-transform: uppercase;
+}
+.listOfTheBestStudentsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-2xl-5) 0 0;
+  text-align: left;
+}
+.child,
+.subtractIcon {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.child {
+  margin: 0 !important;
+}
+.subtractIcon {
+  z-index: 1;
+}
+.frameChild {
+  position: absolute;
+  top: 50px;
+  left: 270px;
+  background-color: var(--color-gray-800);
+  width: 4px;
+  height: 4px;
+  z-index: 2;
+}
+.subtractParent {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.div1 {
+  position: relative;
+  line-height: 26.67px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 2;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-11xs) 0 0;
+}
+.chevronDownIcon {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  min-height: 30px;
+  z-index: 2;
+}
+.div,
+.frameParent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+}
+.frameParent {
+  align-self: stretch;
+  flex: 1;
+  padding: var(--padding-xs) var(--padding-26xl);
+  gap: var(--gap-xs);
+}
+.div {
+  height: 69px;
+  width: 288px;
+  padding: var(--padding-5xs) var(--padding-6xs) var(--padding-6xs);
+  box-sizing: border-box;
+  color: var(--black);
+}
+.div3,
+.item {
+  position: absolute;
+}
+.item {
+  height: 100%;
+  width: 100%;
+  margin: 0 !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.div3 {
+  top: 16.5px;
+  left: 50px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2;
+}
+.subtractIcon1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 274px;
+  height: 54px;
+  z-index: 1;
+}
+.containerWithCircles {
+  position: absolute;
+  top: 50px;
+  left: 270px;
+  background-color: var(--color-gray-800);
+  width: 4px;
+  height: 4px;
+  z-index: 2;
+}
+.icon24pxSearch {
+  position: absolute;
+  top: 17px;
+  left: 204px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  z-index: 2;
+}
+.subtractGroup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.parent {
+  height: 54px;
+  flex: 1;
+  position: relative;
+}
+.containerWithThreeDividers,
+.div2 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.div2 {
+  width: 288px;
+  justify-content: flex-start;
+  padding: var(--padding-5xs) var(--padding-6xs) var(--padding-6xs);
+  box-sizing: border-box;
+  position: relative;
+  font-size: var(--text-body-size);
+  color: var(--color-gray-1500);
+}
+.containerWithThreeDividers {
+  align-self: stretch;
+  justify-content: space-between;
+  padding: 0 var(--padding-61xl);
+  gap: var(--gap-xl);
+  z-index: 4;
+  text-align: center;
+  font-size: var(--font-size-3xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 1050px) {
+  .containerWithThreeDividers {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 750px) {
+  .containerWithThreeDividers {
+    padding-left: var(--padding-21xl);
+    padding-right: var(--padding-21xl);
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 450px) {
+  .div1,
+  .listOfThe {
+    font-size: var(--text-body-size);
+  }
+  .frameParent {
+    padding-left: var(--padding-xl);
+    padding-right: var(--padding-xl);
+    box-sizing: border-box;
+  }
+}

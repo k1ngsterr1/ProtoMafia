@@ -1,0 +1,199 @@
+.mafiashow,
+.time {
+  margin: 0;
+}
+.mafiashowTime {
+  width: 123px;
+  line-height: 100%;
+}
+.div,
+.div1,
+.mafiashowTime {
+  position: relative;
+  display: inline-block;
+}
+.div {
+  color: var(--main);
+  min-width: 70px;
+}
+.div1 {
+  min-width: 71px;
+}
+.div1,
+.div2 {
+  white-space: nowrap;
+}
+.div2,
+.div3,
+.div4 {
+  position: relative;
+}
+.div4 {
+  display: inline-block;
+  min-width: 72px;
+}
+.arithmeticOperator {
+  position: relative;
+  font-size: var(--font-size-base);
+  white-space: pre-wrap;
+  flex-shrink: 0;
+}
+.iconsChild,
+.variableHolder {
+  font-family: var(--font-sf-pro-display);
+}
+.variableHolder {
+  width: 794px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-26xl);
+  max-width: 100%;
+  text-align: left;
+}
+.iconsChild {
+  align-self: stretch;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+}
+.userIcon {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  min-height: 30px;
+}
+.icons,
+.logicOperator {
+  display: flex;
+  flex-direction: row;
+}
+.icons {
+  align-self: stretch;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.logicOperator {
+  height: 30px;
+  width: 147px;
+  align-items: center;
+  justify-content: flex-start;
+}
+.image6Icon,
+.navigationBar {
+  align-self: stretch;
+  max-width: 100%;
+}
+.navigationBar {
+  background-color: var(--color-gray-400);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-2xl) var(--padding-61xl);
+  box-sizing: border-box;
+  top: 0;
+  z-index: 99;
+  position: sticky;
+  gap: var(--gap-xl);
+  text-align: center;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-family: var(--font-league);
+}
+.image6Icon {
+  position: relative;
+  overflow: hidden;
+  max-height: 100%;
+  object-fit: cover;
+}
+.div5,
+.mafia {
+  position: absolute;
+  margin: 0 !important;
+  display: inline-block;
+}
+.mafia {
+  width: 345px;
+  height: 268px;
+  right: 920px;
+  bottom: 174px;
+  font-size: inherit;
+  font-weight: 400;
+  font-family: inherit;
+  text-shadow: 5px 4px 4px rgba(41, 41, 41, 0.1);
+  z-index: 3;
+  color: #D01926;
+}
+.div5 {
+  right: 983.5px;
+  bottom: 110px;
+  font-size: var(--font-size-3xl);
+  font-weight: 500;
+  font-family: var(--font-sf-pro-display);
+  color: var(--black);
+  text-align: center;
+  min-width: 71px;
+  z-index: 4;
+}
+.inputProvider,
+.outputReceiver {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.outputReceiver {
+  flex: 1;
+  flex-direction: column;
+  position: relative;
+}
+.inputProvider {
+  height: 700px;
+  flex-direction: row;
+  padding: 0 0 var(--padding-9xl);
+  box-sizing: border-box;
+  text-align: left;
+  font-size: var(--font-size-201xl);
+  color: var(--main);
+  font-family: var(--font-compacta-bt);
+}
+@media screen and (max-width: 1225px) {
+  .navigationBar {
+    padding-left: var(--padding-21xl);
+    padding-right: var(--padding-21xl);
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .arithmeticOperator {
+    display: none;
+  }
+  .variableHolder {
+    width: 676px;
+  }
+}
+@media screen and (max-width: 750px) {
+  .mafia {
+    font-size: var(--font-size-69xl);
+  }
+}
+@media screen and (max-width: 450px) {
+  .variableHolder {
+    gap: 45px 22px;
+  }
+  .mafia {
+    font-size: var(--font-size-36xl);
+  }
+  .div5 {
+    font-size: var(--text-body-size);
+  }
+}
+@media screen and (max-width: 1920px) {
+  .div5{
+    font-size: var(--text-body-size);
+  }
+}

@@ -1,0 +1,76 @@
+.div,
+.div1 {
+  position: relative;
+  line-height: 24px;
+  font-weight: 600;
+}
+.div1 {
+  color: var(--color-darkslategray);
+}
+.edgeWeigher {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-21xl);
+}
+.breadthFirstSearcherChild {
+  height: 64px;
+  width: 64px;
+  position: relative;
+}
+.dijkstraFinder {
+  position: relative;
+  line-height: 24px;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 46px;
+}
+.breadthFirstSearcher {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+  font-size: var(--font-size-13xl);
+}
+.mSTFinder {
+  width: 277px;
+  border-radius: var(--br-xl);
+  background-color: var(--secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-base);
+  box-sizing: border-box;
+  gap: var(--gap-base);
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 1050px) {
+  .dijkstraFinder {
+    font-size: var(--font-size-7xl);
+    line-height: 19px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .div,
+  .div1 {
+    font-size: var(--font-size-base);
+    line-height: 19px;
+  }
+  .edgeWeigher {
+    flex-wrap: wrap;
+  }
+  .dijkstraFinder {
+    font-size: var(--font-size-lgi);
+    line-height: 14px;
+  }
+  .breadthFirstSearcher {
+    flex-wrap: wrap;
+  }
+}

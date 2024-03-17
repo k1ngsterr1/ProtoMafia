@@ -1,0 +1,380 @@
+.login {
+  margin: 0;
+  width: 144px;
+  position: relative;
+  font-size: inherit;
+  letter-spacing: -2px;
+  line-height: 65px;
+  font-weight: 700;
+  font-family: inherit;
+  display: inline-block;
+}
+.loginWrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 var(--padding-xl);
+}
+.toGetStarted {
+  align-self: stretch;
+  position: relative;
+  font-size: var(--font-size-lgi);
+  letter-spacing: -0.2px;
+  line-height: 32px;
+  color: var(--color-tan-100);
+  mix-blend-mode: normal;
+}
+.frameGroup,
+.frameWrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frameGroup {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-15xl);
+}
+.frameWrapper {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-5xs) var(--padding-base);
+  box-sizing: border-box;
+  color: var(--secondary);
+}
+.bg,
+.label {
+  position: relative;
+}
+.bg {
+  width: 351px;
+  height: 374px;
+  border-radius: var(--br-3xs);
+  background-color: var(--white);
+  box-shadow: 0 34px 33px -23px rgba(22, 28, 45, 0.13);
+  border: 1px solid var(--color-whitesmoke-200);
+  box-sizing: border-box;
+  display: none;
+  max-width: 100%;
+}
+.label {
+  width: 87px;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  display: inline-block;
+  z-index: 1;
+}
+.bgBorder,
+.bgSolid {
+  border-radius: var(--br-5xs);
+}
+.bgSolid {
+  height: 50px;
+  width: 299px;
+  position: relative;
+  background-color: var(--white);
+  display: none;
+  z-index: 0;
+}
+.bgBorder {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: -1px;
+  bottom: -1px;
+  left: 0;
+  border: 1px solid var(--color-whitesmoke-200);
+  box-sizing: border-box;
+  z-index: 1;
+}
+.inputName {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font-family: var(--font-gilroy);
+  font-size: var(--font-size-mini);
+  background-color: transparent;
+  height: 26px;
+  flex: 1;
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  color: var(--color-gray-1100);
+  text-align: left;
+  display: inline-block;
+  mix-blend-mode: normal;
+  min-width: 157px;
+  padding: 0;
+  z-index: 2;
+}
+.inputBox {
+  align-self: stretch;
+  border-radius: var(--br-5xs);
+  background-color: var(--white);
+  overflow: hidden;
+  flex-direction: row;
+  padding: var(--padding-xs) var(--padding-xl) var(--padding-xs)
+    var(--padding-lg);
+  position: relative;
+  z-index: 1;
+}
+.frameContainer,
+.inputBox,
+.labelParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.labelParent {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-6xs);
+}
+.frameContainer {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-11xs) 0 var(--padding-12xs);
+}
+.label1 {
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  display: inline-block;
+  min-width: 67px;
+  z-index: 1;
+}
+.labelWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-11xs) 0 0;
+}
+.forgotPassword {
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  color: var(--secondary);
+  text-align: right;
+  z-index: 1;
+}
+.rememberMeCheckbox {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.bgBorder1,
+.bgSolid1 {
+  border-radius: var(--br-5xs);
+}
+.bgSolid1 {
+  height: 50px;
+  width: 299px;
+  position: relative;
+  background-color: var(--white);
+  display: none;
+  z-index: 0;
+}
+.bgBorder1 {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: -1px;
+  bottom: -1px;
+  left: 0;
+  border: 1px solid var(--color-whitesmoke-200);
+  box-sizing: border-box;
+  z-index: 1;
+}
+.inputName1 {
+  flex: 1;
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  mix-blend-mode: normal;
+  z-index: 2;
+}
+.inputBox1 {
+  align-self: stretch;
+  border-radius: var(--br-5xs);
+  background-color: var(--white);
+  overflow: hidden;
+  flex-direction: row;
+  padding: var(--padding-xs) var(--padding-xl) var(--padding-xs)
+    var(--padding-lg);
+  position: relative;
+  z-index: 1;
+  color: var(--color-gray-1100);
+}
+.forgotPasswordInput,
+.inputBox1,
+.rememberMeCheckboxParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.rememberMeCheckboxParent {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-6xs);
+}
+.forgotPasswordInput {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-11xs) 0 var(--padding-12xs);
+}
+.bg1 {
+  margin: 0;
+  width: 19px;
+  height: 19px;
+  position: relative;
+  border-radius: var(--br-10xs);
+  z-index: 1;
+}
+.bgWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-9xs) 0 0;
+}
+.rememberMe {
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  z-index: 1;
+}
+.frameDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 0 var(--padding-7xs);
+  gap: var(--gap-6xs);
+}
+.rectangle {
+  height: 59px;
+  width: 300px;
+  position: relative;
+  border-radius: var(--br-5xs);
+  background-color: var(--secondary);
+  display: none;
+}
+.buttonName {
+  flex: 1;
+  position: relative;
+  letter-spacing: -0.6px;
+  line-height: 32px;
+  z-index: 1;
+}
+.bgParent,
+.button1,
+.rememberMeCheckmark {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.button1 {
+  flex: 1;
+  border-radius: var(--br-5xs);
+  background-color: var(--secondary);
+  overflow: hidden;
+  flex-direction: row;
+  padding: var(--padding-smi) 0 var(--padding-sm);
+  white-space: nowrap;
+  z-index: 1;
+}
+.bgParent,
+.rememberMeCheckmark {
+  align-self: stretch;
+}
+.rememberMeCheckmark {
+  flex-direction: row;
+  padding: 0 var(--padding-12xs);
+  text-align: center;
+  font-size: var(--font-size-mid);
+  color: var(--white);
+}
+.bgParent {
+  border-radius: var(--br-3xs);
+  background-color: var(--white);
+  box-shadow: 0 34px 33px -23px rgba(22, 28, 45, 0.13);
+  border: 1px solid var(--color-whitesmoke-200);
+  box-sizing: border-box;
+  flex-direction: column;
+  padding: var(--padding-7xl) var(--padding-4xl) var(--padding-12xl);
+  gap: var(--gap-lgi);
+  max-width: 100%;
+  text-align: left;
+  font-size: var(--font-size-mini);
+}
+.createAnAccount {
+  color: var(--secondary);
+}
+.dontHaveAnContainer {
+  flex: 1;
+  position: relative;
+  letter-spacing: -0.2px;
+  line-height: 29px;
+  display: inline-block;
+  max-width: 100%;
+}
+.dontHaveAnAccounWrapper,
+.frameParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.dontHaveAnAccounWrapper {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-4xs);
+  box-sizing: border-box;
+  font-size: var(--font-size-mid);
+}
+.frameParent {
+  width: 350px;
+  flex-direction: column;
+  gap: var(--gap-20xl);
+  text-align: center;
+  font-size: var(--font-size-41xl);
+  color: var(--color-gray-700);
+  font-family: var(--font-gilroy);
+}
+@media screen and (max-width: 750px) {
+  .login {
+    font-size: var(--font-size-29xl);
+    line-height: 52px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .login {
+    font-size: var(--font-size-17xl);
+    line-height: 39px;
+  }
+  .frameGroup {
+    gap: 17px 34px;
+  }
+  .rememberMeCheckbox {
+    flex-wrap: wrap;
+  }
+  .bgParent {
+    padding-top: var(--padding-xl);
+    padding-bottom: var(--padding-xl);
+    box-sizing: border-box;
+  }
+  .frameParent {
+    gap: 19px 39px;
+  }
+}

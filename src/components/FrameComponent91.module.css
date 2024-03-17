@@ -1,0 +1,56 @@
+.frameChild {
+  height: 64px;
+  width: 64px;
+  position: relative;
+}
+.errorHandler {
+  position: relative;
+  line-height: 24px;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 13px;
+}
+.dataMerge {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 var(--padding-10xl);
+}
+.div {
+  position: relative;
+  line-height: 24px;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 71px;
+}
+.logicGateway {
+  flex-direction: column;
+}
+.frameParent,
+.logicGateway,
+.outputCollector {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.outputCollector {
+  flex-direction: column;
+  padding: var(--padding-5xs) 0 0;
+}
+.frameParent {
+  height: 64px;
+  flex-direction: row;
+  gap: var(--gap-5xs);
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 450px) {
+  .div,
+  .errorHandler {
+    font-size: var(--font-size-base);
+    line-height: 19px;
+  }
+}

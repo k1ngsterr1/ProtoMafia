@@ -1,0 +1,98 @@
+.frameChild,
+.frameItem {
+  box-sizing: border-box;
+  opacity: 0.5;
+}
+.frameChild {
+  align-self: stretch;
+  width: 1px;
+  position: relative;
+  border-right: 1px solid var(--white);
+}
+.frameItem {
+  height: 1px;
+  width: 50px;
+  position: absolute;
+  margin: 0 !important;
+  bottom: 138px;
+  left: 0;
+  border-top: 1px solid var(--white);
+  z-index: 1;
+}
+.activityIcon {
+  height: 40px;
+  width: 40px;
+  position: relative;
+}
+.activityWrapper {
+  cursor: pointer;
+  border: 1px solid var(--white);
+  padding: var(--padding-3xs) var(--padding-4xs);
+  background-color: transparent;
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameInner {
+  width: 50px;
+  height: 1px;
+  position: relative;
+  border-top: 1px solid var(--white);
+  box-sizing: border-box;
+  opacity: 0.5;
+}
+.lineWrapper {
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-11xl) 0 0;
+  box-sizing: border-box;
+}
+.lightningCircleContainedIcon {
+  height: 40px;
+  width: 40px;
+  position: relative;
+}
+.lightningCircleContainedWrapper {
+  cursor: pointer;
+  border: 1px solid var(--white);
+  padding: var(--padding-3xs) var(--padding-4xs);
+  background-color: transparent;
+  align-self: stretch;
+  flex: 1;
+  flex-direction: row;
+}
+.frameParent,
+.frameWrapper,
+.lightningCircleContainedWrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameParent {
+  align-self: stretch;
+  height: 60px;
+  flex-direction: row;
+}
+.frameWrapper {
+  height: 169px;
+  width: 170px;
+  flex-direction: column;
+}
+.lineParent {
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 0 0 var(--padding-12xs);
+  position: relative;
+  gap: var(--gap-xl);
+  z-index: 7;
+}

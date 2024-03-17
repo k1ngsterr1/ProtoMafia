@@ -1,0 +1,123 @@
+.mafia {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  font-weight: 900;
+  font-family: inherit;
+  -webkit-text-stroke: 1px #d01926;
+  opacity: 0.5;
+  z-index: 7;
+}
+.layoutManager,
+.layoutManager1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-crimson-100);
+  width: 17.9px;
+  height: 21.4px;
+}
+.layoutManager1 {
+  left: 26.9px;
+}
+.colorPalette {
+  height: 21.4px;
+  width: 44.8px;
+  position: relative;
+  flex-shrink: 0;
+  debug_commit: 612783b;
+}
+.sizeSliders,
+.sizeSliders1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-crimson-100);
+  width: 17.9px;
+  height: 21.4px;
+}
+.sizeSliders1 {
+  left: 26.9px;
+}
+.colorPalette1 {
+  width: 44.8px;
+  height: 21.4px;
+  position: relative;
+}
+.proximityDetector,
+.proximityDetector1 {
+  position: absolute;
+  top: 0;
+  left: 13.4px;
+  background-color: var(--color-crimson-100);
+  width: 17.9px;
+  height: 21.4px;
+}
+.proximityDetector1 {
+  top: 32.1px;
+  left: 0;
+}
+.transformationTools {
+  width: 31.3px;
+  height: 53.5px;
+  position: relative;
+}
+.colorPaletteGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16.09999999999991px;
+  flex-shrink: 0;
+  debug_commit: 612783b;
+}
+.colorPaletteParent,
+.frameWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.colorPaletteParent {
+  flex: 1;
+  justify-content: space-between;
+  opacity: 0.5;
+  gap: var(--gap-xl);
+  z-index: 6;
+}
+.frameWrapper {
+  width: 134.4px;
+  justify-content: flex-start;
+  padding: 0 var(--padding-8xs) 0 var(--padding-9xs);
+  box-sizing: border-box;
+  margin-top: -40px;
+}
+.mafiaParent,
+.shapeCollection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.shapeCollection {
+  width: 1234px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 var(--padding-xl);
+  box-sizing: border-box;
+  text-align: center;
+  font-size: var(--font-size-281xl);
+  color: transparent;
+  font-family: var(--font-montserrat);
+}
+@media screen and (max-width: 750px) {
+  .mafia {
+    font-size: var(--font-size-101xl);
+  }
+}
+@media screen and (max-width: 450px) {
+  .mafia {
+    font-size: var(--font-size-56xl);
+  }
+}

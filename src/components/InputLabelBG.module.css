@@ -1,0 +1,83 @@
+.label {
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  z-index: 1;
+}
+.bgBorder,
+.bgSolid {
+  border-radius: var(--br-5xs);
+}
+.bgSolid {
+  height: 50px;
+  width: 300px;
+  position: relative;
+  background-color: var(--white);
+  display: none;
+  z-index: 0;
+}
+.bgBorder {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: -1px;
+  bottom: -1px;
+  left: 0;
+  border: 1px solid var(--color-whitesmoke-200);
+  box-sizing: border-box;
+  z-index: 1;
+}
+.inputName {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font-family: var(--font-gilroy);
+  font-size: var(--font-size-mini);
+  background-color: transparent;
+  height: 26px;
+  flex: 1;
+  position: relative;
+  letter-spacing: -0.1px;
+  line-height: 26px;
+  color: var(--color-tan-100);
+  text-align: left;
+  display: inline-block;
+  mix-blend-mode: normal;
+  min-width: 157px;
+  padding: 0;
+  z-index: 2;
+}
+.inputBox {
+  align-self: stretch;
+  border-radius: var(--br-5xs);
+  background-color: var(--white);
+  overflow: hidden;
+  flex-direction: row;
+  padding: var(--padding-xs) var(--padding-xl) var(--padding-xs)
+    var(--padding-lg);
+  position: relative;
+  z-index: 1;
+}
+.inputBox,
+.inputLabelBG,
+.labelParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.labelParent {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-6xs);
+}
+.inputLabelBG {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-12xs);
+  text-align: left;
+  font-size: var(--font-size-mini);
+  color: var(--secondary);
+  font-family: var(--font-gilroy);
+}

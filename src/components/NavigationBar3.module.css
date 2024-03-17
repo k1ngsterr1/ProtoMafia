@@ -1,0 +1,124 @@
+.logoBlack11Icon {
+  height: 40px;
+  width: 135px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  min-height: 40px;
+}
+.div,
+.div1 {
+  align-self: stretch;
+  position: relative;
+}
+.div1 {
+  color: var(--main);
+}
+.div1,
+.div2 {
+  white-space: nowrap;
+}
+.div2,
+.div3,
+.div4 {
+  align-self: stretch;
+  position: relative;
+}
+.div5 {
+  height: 19px;
+  position: relative;
+  font-size: var(--font-size-base);
+  white-space: pre-wrap;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.parent {
+  height: 24px;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-26xl);
+  max-width: 100%;
+}
+.leftIcon,
+.rus {
+  position: relative;
+}
+.rus {
+  display: inline-block;
+  min-width: 38px;
+}
+.leftIcon {
+  height: 18px;
+  width: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.leftInstance {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-10xs) 0;
+  gap: var(--gap-8xs);
+}
+.userIcon {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  min-height: 30px;
+}
+.icons {
+  height: 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.settingSvgrepocomIcon {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.iconsParent,
+.navigationBar {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.iconsParent {
+  width: 211px;
+  justify-content: flex-start;
+  gap: var(--gap-5xl);
+}
+.navigationBar {
+  height: 82px;
+  background-color: var(--color-gray-900);
+  justify-content: space-between;
+  padding: var(--padding-2xl) var(--padding-61xl);
+  box-sizing: border-box;
+  top: 0;
+  z-index: 99;
+  position: sticky;
+  max-width: 100%;
+  gap: var(--gap-xl);
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 675px) {
+  .navigationBar {
+    padding-left: var(--padding-21xl);
+    padding-right: var(--padding-21xl);
+    box-sizing: border-box;
+  }
+}

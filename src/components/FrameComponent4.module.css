@@ -1,0 +1,878 @@
+.grommetIconsmoney,
+.memojiIcon {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.memojiIcon {
+  width: 165px;
+  height: 165px;
+  border-radius: var(--br-181xl);
+  object-fit: cover;
+}
+.grommetIconsmoney {
+  height: 32px;
+  width: 32px;
+}
+.div {
+  position: relative;
+  line-height: 14px;
+  font-weight: 500;
+}
+.lobbyStatusIndicator,
+.memojiParent {
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-xs);
+}
+.memojiParent {
+  height: 213px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-base);
+  min-width: 196px;
+}
+.onigiri {
+  margin: 0;
+  width: 111px;
+  height: 30px;
+  font-size: inherit;
+  line-height: 96px;
+  font-weight: 500;
+  font-family: inherit;
+  display: inline-block;
+}
+.c,
+.mdirankIcon,
+.onigiri {
+  position: relative;
+}
+.c {
+  height: 14px;
+  font-size: var(--font-size-xl);
+  line-height: 96px;
+  font-weight: 500;
+  color: var(--color-dimgray);
+  display: inline-block;
+  white-space: nowrap;
+}
+.mdirankIcon {
+  height: 24px;
+  width: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  min-height: 24px;
+}
+.div1 {
+  flex: 1;
+  position: relative;
+  font-size: var(--font-size-xl);
+  line-height: 24px;
+  font-weight: 500;
+  font-family: var(--font-sf-pro-display);
+  color: var(--black);
+  text-align: left;
+}
+.mdirankParent,
+.onigiriParent {
+  display: flex;
+  align-items: flex-start;
+}
+.mdirankParent {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-5xs) var(--padding-base);
+  background-color: var(--white);
+  width: 130px;
+  height: 40px;
+  border-radius: var(--br-3xs);
+  flex-direction: row;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  gap: var(--gap-5xs);
+  white-space: nowrap;
+}
+.mdirankParent:hover {
+  background-color: var(--color-gainsboro-100);
+}
+.onigiriParent {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.frameContainer,
+.frameParent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.frameContainer {
+  height: 121px;
+  justify-content: flex-start;
+  padding: 0 var(--padding-mini) 0 0;
+  box-sizing: border-box;
+  min-width: 175px;
+  font-size: var(--font-size-23xl);
+}
+.frameParent {
+  border-radius: var(--br-xl);
+  background-color: var(--black);
+  justify-content: center;
+  padding: var(--padding-21xl) var(--padding-23xl);
+  gap: var(--gap-2xl);
+}
+.div2,
+.div3 {
+  height: 14px;
+  position: relative;
+  font-weight: 500;
+  display: inline-block;
+}
+.div2 {
+  min-width: 35px;
+  white-space: nowrap;
+}
+.div3 {
+  min-width: 15px;
+}
+.parent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-base);
+}
+.div4,
+.div5 {
+  height: 14px;
+  position: relative;
+  font-weight: 500;
+  display: inline-block;
+}
+.div4 {
+  min-width: 60px;
+  white-space: nowrap;
+}
+.div5 {
+  min-width: 15px;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-base);
+}
+.div6,
+.div7 {
+  height: 14px;
+  position: relative;
+  font-weight: 500;
+  display: inline-block;
+}
+.div6 {
+  min-width: 45px;
+  white-space: nowrap;
+}
+.div7 {
+  min-width: 15px;
+}
+.container,
+.frameGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-base);
+}
+.frameGroup {
+  align-self: stretch;
+  border-radius: var(--br-xl);
+  background-color: var(--black);
+  overflow-x: auto;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: var(--padding-11xl) var(--padding-51xl);
+  gap: var(--gap-xl);
+}
+.div8 {
+  width: 332px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.checkBrokenIcon {
+  height: 24px;
+  width: 24px;
+  position: relative;
+}
+.frameDiv,
+.lobbySearchBar {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+.frameDiv {
+  width: 368px;
+  height: 26px;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--gap-xs);
+  text-align: center;
+  font-size: var(--font-size-3xl);
+}
+.lobbySearchBar {
+  width: 476px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--gap-10xl);
+  min-width: 476px;
+  z-index: 4;
+}
+.div9,
+.h1 {
+  position: relative;
+  display: inline-block;
+}
+.h1 {
+  margin: 0;
+  height: 28px;
+  font-size: inherit;
+  font-weight: 600;
+  font-family: inherit;
+  z-index: 4;
+}
+.div9 {
+  height: 18px;
+  font-size: var(--font-size-7xl);
+  font-family: var(--font-sf-pro-display);
+  color: var(--white);
+  text-align: left;
+}
+.socialMediaIconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-9xs-5) 0 0;
+}
+.icon24pxSearch {
+  height: 25px;
+  width: 25px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.socialMediaIconContainerParent {
+  align-self: stretch;
+  flex-direction: row;
+  gap: var(--gap-xs);
+  opacity: 0.7;
+}
+.frameButton,
+.frameWrapper2,
+.parent1,
+.socialMediaIconContainerParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameButton {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-base) var(--padding-3xl);
+  background-color: var(--black);
+  flex: 1;
+  border-radius: var(--br-xs);
+  flex-direction: row;
+  z-index: 4;
+}
+.frameWrapper2,
+.parent1 {
+  flex-direction: column;
+}
+.parent1 {
+  flex: 1;
+  gap: var(--gap-xl);
+}
+.frameWrapper2 {
+  height: 126px;
+  padding: var(--padding-2xl) 0 0;
+  box-sizing: border-box;
+}
+.child,
+.subtractIcon {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.child {
+  margin: 0 !important;
+}
+.subtractIcon {
+  z-index: 1;
+}
+.createGameBtnChild {
+  position: absolute;
+  top: 50px;
+  left: 270px;
+  background-color: var(--color-gray-800);
+  width: 4px;
+  height: 4px;
+  z-index: 2;
+}
+.createGameBtn {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.div11,
+.plus01Icon {
+  position: relative;
+  z-index: 2;
+}
+.div11 {
+  font-size: var(--font-size-3xl);
+  line-height: 26.67px;
+  font-weight: 500;
+  font-family: var(--font-sf-pro-display);
+  color: var(--black);
+  text-align: center;
+}
+.plus01Icon {
+  height: 26px;
+  width: 26px;
+  min-height: 26px;
+}
+.createGameBtnParent {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-sm) var(--padding-32xl);
+  background-color: transparent;
+  align-self: stretch;
+  flex: 1;
+  justify-content: flex-start;
+  position: relative;
+  gap: var(--gap-xs);
+}
+.createGameBtnParent,
+.div10,
+.frameParent2 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.div10 {
+  height: 69px;
+  width: 288px;
+  justify-content: flex-start;
+  padding: var(--padding-5xs) var(--padding-6xs) var(--padding-6xs);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 4;
+}
+.frameParent2 {
+  align-self: stretch;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.div12 {
+  height: 18px;
+  position: relative;
+  display: inline-block;
+}
+.gameDetailsHeader,
+.gameDetailsHeader1 {
+  font-family: var(--font-sf-pro-display);
+  font-size: var(--font-size-7xl);
+  color: var(--white);
+}
+.div13 {
+  height: 18px;
+  position: relative;
+  display: inline-block;
+}
+.parent2 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.div14,
+.div15 {
+  position: relative;
+  display: inline-block;
+}
+.div14 {
+  height: 18px;
+  width: 173px;
+  flex-shrink: 0;
+}
+.div15 {
+  height: 16px;
+  white-space: nowrap;
+}
+.live,
+.wrapper {
+  font-size: var(--font-size-3xl);
+}
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+}
+.live {
+  height: 16px;
+  position: relative;
+  font-family: var(--font-sf-pro-display);
+  color: var(--white);
+  text-align: left;
+  display: inline-block;
+  min-width: 38px;
+}
+.contactInfoBarInner,
+.liveWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.liveWrapper {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-7xs) var(--padding-xl);
+  background-color: var(--main);
+  border-radius: var(--br-xs);
+}
+.liveContainer:hover,
+.liveFrame:hover,
+.liveWrapper1:hover,
+.liveWrapper:hover {
+  background-color: var(--color-crimson-200);
+}
+.contactInfoBarInner {
+  padding: 0 var(--padding-3xs) 0 0;
+}
+.div16 {
+  height: 18px;
+  width: 179px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.contactInfoBar {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.div17,
+.div18 {
+  position: relative;
+  display: inline-block;
+}
+.div17 {
+  height: 18px;
+  width: 173px;
+  flex-shrink: 0;
+}
+.div18 {
+  height: 16px;
+  white-space: nowrap;
+}
+.frame,
+.live1 {
+  font-size: var(--font-size-3xl);
+}
+.frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+}
+.live1 {
+  height: 16px;
+  position: relative;
+  font-family: var(--font-sf-pro-display);
+  color: var(--white);
+  text-align: left;
+  display: inline-block;
+  min-width: 38px;
+}
+.contactInfoBarChild,
+.liveContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.liveContainer {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-7xs) var(--padding-xl);
+  background-color: var(--main);
+  border-radius: var(--br-xs);
+}
+.contactInfoBarChild {
+  padding: 0 var(--padding-3xs) 0 0;
+}
+.div19 {
+  height: 18px;
+  width: 179px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.contactInfoBar1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.div20,
+.div21 {
+  position: relative;
+  display: inline-block;
+}
+.div20 {
+  height: 18px;
+  width: 173px;
+  flex-shrink: 0;
+}
+.div21 {
+  height: 16px;
+  white-space: nowrap;
+}
+.live2,
+.wrapper1 {
+  font-size: var(--font-size-3xl);
+}
+.wrapper1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+}
+.live2 {
+  height: 16px;
+  position: relative;
+  font-family: var(--font-sf-pro-display);
+  color: var(--white);
+  text-align: left;
+  display: inline-block;
+  min-width: 38px;
+}
+.contactInfoBarInner1,
+.liveFrame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.liveFrame {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-7xs) var(--padding-xl);
+  background-color: var(--main);
+  border-radius: var(--br-xs);
+}
+.contactInfoBarInner1 {
+  padding: 0 var(--padding-3xs) 0 0;
+}
+.div22 {
+  height: 18px;
+  width: 179px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.contactInfoBar2 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.div23,
+.div24 {
+  position: relative;
+  display: inline-block;
+}
+.div23 {
+  height: 18px;
+  width: 173px;
+  flex-shrink: 0;
+}
+.div24 {
+  height: 16px;
+  white-space: nowrap;
+}
+.live3,
+.wrapper2 {
+  font-size: var(--font-size-3xl);
+}
+.wrapper2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+}
+.live3 {
+  height: 16px;
+  position: relative;
+  font-family: var(--font-sf-pro-display);
+  color: var(--white);
+  text-align: left;
+  display: inline-block;
+  min-width: 38px;
+}
+.contactInfoBarInner2,
+.liveWrapper1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.liveWrapper1 {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-7xs) var(--padding-xl);
+  background-color: var(--main);
+  border-radius: var(--br-xs);
+}
+.contactInfoBarInner2 {
+  padding: 0 var(--padding-3xs) 0 0;
+}
+.div25 {
+  height: 18px;
+  width: 179px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.contactInfoBar3 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.frameParent1,
+.frameParent3 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameParent3 {
+  gap: var(--gap-13xl);
+  z-index: 4;
+  font-size: var(--font-size-7xl);
+}
+.frameParent1 {
+  gap: var(--gap-21xl);
+}
+.frameWrapper,
+.frameWrapper1,
+.lobbySearchBarParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frameWrapper1 {
+  flex: 1;
+  flex-direction: column;
+  padding: var(--padding-lgi) 0 0;
+  box-sizing: border-box;
+  min-width: 497px;
+  font-size: var(--font-size-21xl);
+}
+.frameWrapper,
+.lobbySearchBarParent {
+  flex-direction: row;
+}
+.lobbySearchBarParent {
+  flex: 1;
+  gap: var(--gap-21xl);
+}
+.frameWrapper {
+  align-self: stretch;
+  padding: 0 var(--padding-61xl);
+  box-sizing: border-box;
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 1200px) {
+  .lobbySearchBar {
+    flex: 1;
+  }
+  .lobbySearchBarParent {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .onigiri {
+    font-size: var(--font-size-15xl);
+    line-height: 77px;
+  }
+  .h1 {
+    font-size: var(--font-size-13xl);
+  }
+}
+@media screen and (max-width: 750px) {
+  .memojiParent {
+    flex: 1;
+  }
+  .frameContainer {
+    flex: 1;
+    padding-right: 0;
+    box-sizing: border-box;
+  }
+  .frameParent {
+    flex-wrap: wrap;
+    padding-left: var(--padding-2xl);
+    padding-right: var(--padding-2xl);
+    box-sizing: border-box;
+  }
+  .lobbySearchBar {
+    min-width: 100%;
+  }
+  .contactInfoBar,
+  .contactInfoBar1,
+  .contactInfoBar2,
+  .contactInfoBar3,
+  .frameParent2,
+  .parent2 {
+    flex-wrap: wrap;
+  }
+  .frameWrapper1 {
+    min-width: 100%;
+  }
+  .lobbySearchBarParent {
+    gap: 40px 20px;
+  }
+  .frameWrapper {
+    padding-left: var(--padding-21xl);
+    padding-right: var(--padding-21xl);
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 450px) {
+  .div {
+    font-size: var(--font-size-base);
+    line-height: 77px;
+  }
+  .onigiri {
+    font-size: var(--font-size-6xl);
+    line-height: 58px;
+  }
+  .c {
+    line-height: 77px;
+  }
+  .c,
+  .div2,
+  .div3,
+  .div4,
+  .div5,
+  .div6,
+  .div7 {
+    font-size: var(--font-size-base);
+  }
+  .frameGroup {
+    padding-left: var(--padding-xl);
+    padding-right: var(--padding-xl);
+    box-sizing: border-box;
+  }
+  .div8 {
+    font-size: var(--text-body-size);
+  }
+  .h1 {
+    font-size: var(--font-size-5xl);
+  }
+  .div9 {
+    font-size: var(--font-size-2xl);
+  }
+  .div11 {
+    font-size: var(--text-body-size);
+  }
+  .createGameBtnParent {
+    padding-left: var(--padding-xl);
+    padding-right: var(--padding-xl);
+    box-sizing: border-box;
+  }
+  .div12,
+  .div13,
+  .div14 {
+    font-size: var(--font-size-2xl);
+  }
+  .div15,
+  .live {
+    font-size: var(--text-body-size);
+  }
+  .div16,
+  .div17 {
+    font-size: var(--font-size-2xl);
+  }
+  .div18,
+  .live1 {
+    font-size: var(--text-body-size);
+  }
+  .div19,
+  .div20 {
+    font-size: var(--font-size-2xl);
+  }
+  .div21,
+  .live2 {
+    font-size: var(--text-body-size);
+  }
+  .div22,
+  .div23 {
+    font-size: var(--font-size-2xl);
+  }
+  .div24,
+  .live3 {
+    font-size: var(--text-body-size);
+  }
+  .div25 {
+    font-size: var(--font-size-2xl);
+  }
+  .frameParent3 {
+    gap: 16px 32px;
+  }
+  .frameParent1 {
+    gap: 20px 40px;
+  }
+}

@@ -1,0 +1,443 @@
+.rectangleIcon {
+  height: 2792px;
+  width: 1450px;
+  position: absolute;
+  margin: 0 !important;
+  bottom: -2204px;
+  left: -111px;
+  object-fit: cover;
+  z-index: 1;
+}
+.carbondiagramIcon {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.div {
+  position: relative;
+  font-size: var(--font-size-5xl);
+  line-height: 17px;
+  font-weight: 500;
+  font-family: var(--font-sf-pro-display);
+  color: var(--secondary);
+  text-align: left;
+}
+.carbondiagramParent {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-9xs) var(--padding-xl) var(--padding-9xs)
+    var(--padding-5xs);
+  background-color: var(--white);
+  border-radius: var(--br-3xs);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.carbondiagramParent:hover,
+.mdirankParent:hover {
+  background-color: var(--color-gainsboro-100);
+}
+.materialSymbolshistoryIcon {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.div1 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 500;
+}
+.materialSymbolshistoryParent {
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.phwalletIcon {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.div2 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 500;
+}
+.phwalletParent {
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.iconoirsecurityPass {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.div3 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 500;
+}
+.frameDiv,
+.iconoirsecurityPassParent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+.frameDiv {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-13xl);
+  flex-shrink: 0;
+}
+.materialSymbolslogoutIcon {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.div4 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 70px;
+}
+.materialSymbolslogoutParent {
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+  color: var(--main);
+}
+.frameContainer {
+  height: 470px;
+  border-radius: var(--br-xl);
+  background-color: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--padding-21xl);
+  box-sizing: border-box;
+}
+.grommetIconsmoney,
+.memojiIcon {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.memojiIcon {
+  width: 165px;
+  height: 165px;
+  border-radius: var(--br-181xl);
+  object-fit: cover;
+}
+.grommetIconsmoney {
+  height: 32px;
+  width: 32px;
+}
+.div5 {
+  position: relative;
+  line-height: 14px;
+  font-weight: 500;
+}
+.grommetIconsmoneyParent,
+.memojiParent {
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-xs);
+}
+.memojiParent {
+  height: 213px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-base);
+}
+.onigiri {
+  margin: 0;
+  width: 111px;
+  height: 30px;
+  font-size: inherit;
+  line-height: 96px;
+  font-weight: 500;
+  font-family: inherit;
+  display: inline-block;
+}
+.c,
+.mdirankIcon,
+.onigiri {
+  position: relative;
+}
+.c {
+  height: 14px;
+  font-size: var(--font-size-xl);
+  line-height: 96px;
+  font-weight: 500;
+  color: var(--color-dimgray);
+  display: inline-block;
+  white-space: nowrap;
+}
+.mdirankIcon {
+  height: 24px;
+  width: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  min-height: 24px;
+}
+.div6 {
+  flex: 1;
+  position: relative;
+  font-size: var(--font-size-xl);
+  line-height: 24px;
+  font-weight: 500;
+  font-family: var(--font-sf-pro-display);
+  color: var(--black);
+  text-align: left;
+}
+.mdirankParent,
+.onigiriParent {
+  display: flex;
+  align-items: flex-start;
+}
+.mdirankParent {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-5xs) var(--padding-base);
+  background-color: var(--white);
+  width: 130px;
+  height: 40px;
+  border-radius: var(--br-3xs);
+  flex-direction: row;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  gap: var(--gap-5xs);
+  white-space: nowrap;
+}
+.onigiriParent {
+  height: 121px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.phpenIcon {
+  height: 32px;
+  width: 32px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.frameGroup,
+.frameParent1,
+.frameParent2 {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.frameParent2 {
+  justify-content: space-between;
+  padding: 0 var(--padding-8xl) 0 0;
+  box-sizing: border-box;
+  min-width: 192px;
+  max-width: 100%;
+  gap: var(--gap-xl);
+  font-size: var(--font-size-23xl);
+}
+.frameGroup,
+.frameParent1 {
+  justify-content: flex-start;
+}
+.frameParent1 {
+  border-radius: var(--br-xl);
+  background-color: var(--black);
+  flex-wrap: wrap;
+  padding: var(--padding-21xl) var(--padding-lgi) var(--padding-21xl)
+    var(--padding-21xl);
+  box-sizing: border-box;
+  gap: var(--gap-2xl);
+  max-width: calc(100% - 299px);
+  font-size: var(--font-size-xl);
+}
+.frameGroup {
+  gap: var(--gap-base);
+  max-width: 100%;
+  z-index: 2;
+}
+.h1 {
+  margin: 0 !important;
+  height: 30px;
+  width: 222px;
+  position: absolute;
+  bottom: 97px;
+  left: 311px;
+  font-size: var(--font-size-23xl);
+  line-height: 96px;
+  font-weight: 500;
+  font-family: inherit;
+  display: inline-block;
+  z-index: 3;
+}
+.rectangleParent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  max-width: 100%;
+}
+.div7 {
+  width: 46px;
+  color: var(--main);
+  display: inline-block;
+}
+.div10,
+.div7,
+.div8,
+.div9 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 500;
+}
+.parent {
+  width: 471px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+  max-width: 100%;
+  z-index: 3;
+}
+.frameWrapper1 {
+  width: 1093px;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0 var(--padding-xl);
+  box-sizing: border-box;
+  margin-top: -65px;
+}
+.frameParent,
+.frameWrapper,
+.frameWrapper1 {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+}
+.frameParent {
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 470px;
+}
+.frameWrapper {
+  align-self: stretch;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0 var(--padding-xl) 0 0;
+  box-sizing: border-box;
+  text-align: left;
+  font-size: var(--font-size-5xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 1050px) {
+  .frameContainer {
+    display: none;
+  }
+  .onigiri {
+    font-size: var(--font-size-15xl);
+    line-height: 77px;
+  }
+  .frameParent1 {
+    max-width: 100%;
+  }
+  .h1 {
+    font-size: var(--font-size-15xl);
+    line-height: 77px;
+  }
+}
+@media screen and (max-width: 750px) {
+  .frameContainer {
+    padding-top: var(--padding-7xl);
+    padding-bottom: var(--padding-7xl);
+    box-sizing: border-box;
+  }
+  .parent {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 450px) {
+  .div {
+    font-size: var(--font-size-lgi);
+    line-height: 77px;
+  }
+  .carbondiagramParent {
+    flex-wrap: wrap;
+  }
+  .div1,
+  .div2,
+  .div3 {
+    font-size: var(--font-size-lgi);
+    line-height: 77px;
+  }
+  .iconoirsecurityPassParent {
+    flex-wrap: wrap;
+  }
+  .div4 {
+    font-size: var(--font-size-lgi);
+    line-height: 77px;
+  }
+  .frameContainer {
+    height: auto;
+  }
+  .div5 {
+    font-size: var(--font-size-base);
+    line-height: 77px;
+  }
+  .onigiri {
+    font-size: var(--font-size-6xl);
+    line-height: 58px;
+  }
+  .c {
+    font-size: var(--font-size-base);
+    line-height: 77px;
+  }
+  .frameParent2 {
+    flex-wrap: wrap;
+  }
+  .h1 {
+    font-size: var(--font-size-6xl);
+    line-height: 58px;
+  }
+  .div10,
+  .div7,
+  .div8,
+  .div9 {
+    font-size: var(--font-size-lgi);
+    line-height: 77px;
+  }
+}

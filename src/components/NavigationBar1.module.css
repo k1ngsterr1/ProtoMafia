@@ -1,0 +1,140 @@
+.logoBlack11Icon {
+  height: 40px;
+  width: 135px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  min-height: 40px;
+}
+.div {
+  position: relative;
+  display: inline-block;
+  min-width: 70px;
+}
+.div1,
+.div2 {
+  position: relative;
+  white-space: nowrap;
+}
+.div1 {
+  display: inline-block;
+  min-width: 71px;
+}
+.div2 {
+  color: var(--main);
+}
+.div3,
+.div4,
+.div5 {
+  position: relative;
+}
+.div4 {
+  display: inline-block;
+  min-width: 72px;
+}
+.div5 {
+  font-size: var(--font-size-base);
+  white-space: pre-wrap;
+  flex-shrink: 0;
+}
+.parent {
+  width: 794px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-26xl);
+  max-width: 100%;
+}
+.leftIcon,
+.rus {
+  position: relative;
+}
+.rus {
+  display: inline-block;
+  min-width: 38px;
+}
+.leftIcon {
+  height: 18px;
+  width: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.languageSelector {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-10xs) 0;
+  gap: var(--gap-8xs);
+}
+.userIcon {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  min-height: 30px;
+}
+.icons {
+  height: 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+}
+.settingSvgrepocomIcon {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.createGameButton,
+.navigationBar {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.createGameButton {
+  width: 211px;
+  justify-content: flex-start;
+  gap: var(--gap-5xl);
+}
+.navigationBar {
+  height: 82px;
+  background-color: var(--color-gray-900);
+  justify-content: space-between;
+  padding: var(--padding-2xl) var(--padding-61xl);
+  box-sizing: border-box;
+  top: 0;
+  z-index: 99;
+  position: sticky;
+  gap: var(--gap-xl);
+  max-width: 100%;
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-family: var(--font-sf-pro-display);
+}
+@media screen and (max-width: 1200px) {
+  .div5 {
+    display: none;
+  }
+  .parent {
+    width: 676px;
+  }
+  .navigationBar {
+    padding-left: var(--padding-21xl);
+    padding-right: var(--padding-21xl);
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 450px) {
+  .parent {
+    gap: 45px 22px;
+  }
+}
