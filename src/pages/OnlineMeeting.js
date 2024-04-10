@@ -62,14 +62,12 @@ function ParticipantView(props) {
 
 function MeetingView() {
   const [joined, setJoined] = useState(null);
-  //Get the method which will be used to join the meeting.
-  //We will also get the participants list to display all participants
   const { join, participants } = useMeeting({
-    //callback for when meeting is joined successfully
     onMeetingJoined: () => {
       setJoined("JOINED");
     },
   });
+
   const joinMeeting = () => {
     setJoined("JOINING");
     join();

@@ -77,10 +77,6 @@ export function JoiningScreen({
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    console.log("players", players);
-  }, [players]);
-
-  useEffect(() => {
     webcamRef.current = webcamOn;
   }, [webcamOn]);
 
@@ -193,6 +189,7 @@ export function JoiningScreen({
       setVideoTrack(videoTrack);
     }
   };
+
   const changeMic = async (deviceId) => {
     if (micOn) {
       const currentAudioTrack = audioTrackRef.current;
@@ -271,6 +268,7 @@ export function JoiningScreen({
       console.log("Error in requestPermission ", ex);
     }
   }
+
   function onDeviceChanged() {
     setDidDeviceChange(true);
     getCameraDevices();

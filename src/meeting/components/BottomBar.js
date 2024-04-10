@@ -38,9 +38,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
   faChevronUp,
+  faGun,
+  faHatCowboy,
   faMoon,
+  faPerson,
+  faShield,
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
+import { useGetPlayers } from "../../hooks/useGetPlayers";
+import { useKickPlayer } from "../../hooks/useKickPlayer";
+
+import Cookies from "js-cookie";
+import { useGetRole } from "../../hooks/useGetRole";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -210,7 +219,7 @@ const MicBTN = () => {
         borderColor={localMicOn && "#ffffff33"}
         isFocused={localMicOn}
         focusIconColor={localMicOn && "white"}
-        tooltip={"Toggle Mic"}
+        tooltip={"Включить микрофон"}
         renderRightComponent={() => {
           return (
             <>
@@ -389,7 +398,7 @@ const WebCamBTN = () => {
         borderColor={localWebcamOn && "#ffffff33"}
         isFocused={localWebcamOn}
         focusIconColor={localWebcamOn && "white"}
-        tooltip={"Toggle Webcam"}
+        tooltip={"Включить веб-камеру"}
         renderRightComponent={() => {
           return (
             <>
@@ -504,8 +513,20 @@ const Tooltip = ({ children, text }) => {
 };
 
 export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
+  const roomId = Cookies.get("roomId");
+  const userData = Cookies.get("userData");
+  const userDataString = userData ? JSON.parse(userData) : null;
+  const kickPlayer = useKickPlayer();
+  const getRole = useGetRole();
+  const { players } = useGetPlayers(roomId);
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
   const [time, setTime] = useState();
+  const [showPopup, setShowPopup] = useState(false);
+  const [mafia, setMafiaTime] = useState(false);
+
+  useEffect(() => {
+    getRole(roomId, userDataString.id);
+  });
 
   const RaiseHandBTN = ({ isMobile, isTab }) => {
     const { publish } = usePubSub("RAISE_HAND");
@@ -656,7 +677,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           leave();
           setIsMeetingLeft(true);
         }}
-        tooltip="Leave Meeting"
+        tooltip="Покинуть комнату"
       />
     );
   };
@@ -750,12 +771,14 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const DayButton = () => {
     const handleClick = () => {
       setTime("Day");
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 2500);
     };
 
     return (
       <Tooltip text={"Поставить день"}>
         <button
-          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] focus:outline-none focus:border-white focus:ring-2 focus:ring-opacity-50"
+          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
           onClick={handleClick}
         >
           <FontAwesomeIcon icon={faSun} className="text-white text-xl" />
@@ -764,16 +787,38 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
-  const PlayerSelector = () => {
+  const DonButton = () => {
+    const handleClick = () => {};
+
+    return (
+      <Tooltip text={"Познакомиться с Доном"}>
+        <button
+          className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faGun} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
+  const SheriffButton = () => {
+    const handleClick = () => {};
+
+    return (
+      <Tooltip text={"Познакомиться с Шерифом"}>
+        <button
+          className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faShield} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
+  const KillPlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const players = [
-      "Player 1",
-      "Player 2",
-      "Player 3",
-      "Player 4",
-      "Player 5",
-      "Player 6",
-    ];
 
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
@@ -782,10 +827,43 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             <ul className="text-white">
               {players.map((player) => (
                 <li
-                  key={player}
+                  key={player.id}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
-                  {player}
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Убить игрока</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
+        </button>
+      </div>
+    );
+  };
+
+  const PlayerSelector = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {players.map((player) => (
+                <li
+                  key={player.id}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {player.username}
                 </li>
               ))}
             </ul>
@@ -805,18 +883,93 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
+  const KickSelector = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleClick = (playerId) => {
+      kickPlayer(playerId);
+    };
+
+    return (
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {players.map((player) => (
+                <li
+                  key={player.id}
+                  onClick={() => kickPlayer(player.id)}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Кикнуть</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
+        </button>
+      </div>
+    );
+  };
+
   const NightButton = () => {
     const handleClick = () => {
       setTime("Night");
+
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 2500);
     };
 
     return (
       <Tooltip text={"Поставить ночь"}>
         <button
-          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] focus:outline-none focus:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
+          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
           onClick={handleClick}
         >
           <FontAwesomeIcon icon={faMoon} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
+  const MafiaButton = () => {
+    const handleClick = () => {
+      setShowPopup(true);
+      setMafiaTime(true);
+      setTimeout(() => setMafiaTime(false), 2500);
+      setTimeout(() => setShowPopup(false), 2500);
+    };
+
+    return (
+      <Tooltip text={"Познакомить Мафию"}>
+        <button
+          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] focus:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faHatCowboy} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
+  const StartButton = () => {
+    const handleClick = () => {
+      a;
+    };
+
+    return (
+      <Tooltip text={"Начать игру"}>
+        <button className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 text-white border-[#ffffff33] focus:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2">
+          Старт
         </button>
       </Tooltip>
     );
@@ -833,6 +986,15 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const handleCloseFAB = () => {
     setOpen(false);
+  };
+
+  const Popup = ({ whichTime }, { mafia }) => {
+    return (
+      <div className="absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+        {whichTime === "Day" ? <>День</> : <>Ночь</>}
+        {mafia && <>Время для знакомства с мафией</>}
+      </div>
+    );
   };
 
   const BottomBarButtonTypes = useMemo(
@@ -867,6 +1029,18 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     >
       <LeaveBTN />
       <MicBTN />
+      {userDataString.role == "showman" && (
+        <>
+          <DayButton />
+          <NightButton />
+          <MafiaButton />
+          <DonButton />
+          <SheriffButton />
+          <StartButton />
+          <PlayerSelector />
+          <KickSelector />
+        </>
+      )}
       <WebCamBTN />
       <RecordingBTN />
       <OutlinedButton Icon={DotsHorizontalIcon} onClick={handleClickFAB} />
@@ -950,17 +1124,23 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   ) : (
     <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidden">
       <MeetingIdCopyBTN />
-
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         <RecordingBTN />
-        <DayButton />
-        <NightButton />
-        <PlayerSelector />
-        <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
+        {userDataString.role == "showman" && (
+          <>
+            <DayButton />
+            <NightButton />
+            <MafiaButton />
+            <DonButton />
+            <SheriffButton />
+            <StartButton />
+            <PlayerSelector />
+            <KickSelector />
+          </>
+        )}
+        {showPopup && <Popup whichTime={time} mafia={mafia} />}
         <MicBTN />
         <WebCamBTN />
-        <ScreenShareBTN isMobile={isMobile} isTab={isTab} />
-        <PipBTN isMobile={isMobile} isTab={isTab} />
         <LeaveBTN />
       </div>
       <div className="flex items-center justify-center">
