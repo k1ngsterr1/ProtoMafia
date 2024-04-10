@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MeetingAppProvider } from "./MeetingAppContextDef";
 import { MeetingContainer } from "./meeting/MeetingContainer";
 import { LeaveScreen } from "./components/screens/LeaveScreen";
-import { JoiningScreen } from "./components/screens/JoiningScreen"
+import { JoiningScreen } from "./components/screens/JoiningScreen";
 import NavigationBar1 from "./components/NavigationBar1";
 
 function OnlineApp() {
@@ -14,7 +14,7 @@ function OnlineApp() {
   const [micOn, setMicOn] = useState(false);
   const [webcamOn, setWebcamOn] = useState(false);
   const [customAudioStream, setCustomAudioStream] = useState(null);
-  const [customVideoStream, setCustomVideoStream] = useState(null)
+  const [customVideoStream, setCustomVideoStream] = useState(null);
   const [isMeetingStarted, setMeetingStarted] = useState(false);
   const [isMeetingLeft, setIsMeetingLeft] = useState(false);
 
@@ -32,10 +32,8 @@ function OnlineApp() {
 
   return (
     <>
-    <NavigationBar1></NavigationBar1>
       <MeetingAppProvider>
         {isMeetingStarted ? (
-
           <MeetingProvider
             config={{
               meetingId,
@@ -44,7 +42,7 @@ function OnlineApp() {
               name: participantName ? participantName : "TestUser",
               multiStream: true,
               customCameraVideoTrack: customVideoStream,
-              customMicrophoneAudioTrack: customAudioStream
+              customMicrophoneAudioTrack: customAudioStream,
             }}
             token={token}
             reinitialiseMeetingOnConfigChange={true}
@@ -62,11 +60,9 @@ function OnlineApp() {
               setIsMeetingLeft={setIsMeetingLeft}
             />
           </MeetingProvider>
-
         ) : isMeetingLeft ? (
           <LeaveScreen setIsMeetingLeft={setIsMeetingLeft} />
         ) : (
-
           <JoiningScreen
             participantName={participantName}
             setParticipantName={setParticipantName}

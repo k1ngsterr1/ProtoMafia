@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { MeetingDetailsScreen } from "../MeetingDetailsScreen";
 import { createMeeting, getToken, validateMeeting } from "../../api";
 import ConfirmBox from "../ConfirmBox";
-import {
-  Constants,
-  useMediaDevice
-} from "@videosdk.live/react-sdk";
+import { Constants, useMediaDevice } from "@videosdk.live/react-sdk";
 import useMediaStream from "../../hooks/useMediaStream";
 import useIsMobile from "../../hooks/useIsMobile";
 import WebcamOffIcon from "../../icons/WebcamOffIcon";
@@ -20,6 +17,8 @@ import DropDownSpeaker from "../DropDownSpeaker";
 import NetworkStats from "../NetworkStats";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
 import { toast } from "react-toastify";
+import { useGetPlayers } from "../../hooks/useGetPlayers";
+import Cookies from "js-cookie";
 
 export function JoiningScreen({
   participantName,
@@ -33,9 +32,8 @@ export function JoiningScreen({
   setMicOn,
   customAudioStream,
   setCustomAudioStream,
-  setCustomVideoStream
+  setCustomVideoStream,
 }) {
-
   const {
     selectedWebcam,
     selectedMic,
@@ -45,8 +43,8 @@ export function JoiningScreen({
     isCameraPermissionAllowed,
     isMicrophonePermissionAllowed,
     setIsCameraPermissionAllowed,
-    setIsMicrophonePermissionAllowed
-  } = useMeetingAppContext()
+    setIsMicrophonePermissionAllowed,
+  } = useMeetingAppContext();
 
   const [{ webcams, mics, speakers }, setDevices] = useState({
     webcams: [],
@@ -61,12 +59,14 @@ export function JoiningScreen({
     requestPermission,
     getPlaybackDevices,
   } = useMediaDevice({ onDeviceChanged });
+  const roomIdString = Cookies.get("roomId");
+  const roomId = roomIdString ? JSON.parse(roomIdString) : null;
   const [audioTrack, setAudioTrack] = useState(null);
   const [videoTrack, setVideoTrack] = useState(null);
   const [dlgMuted, setDlgMuted] = useState(false);
   const [dlgDevices, setDlgDevices] = useState(false);
-  const [didDeviceChange, setDidDeviceChange] = useState(false)
-
+  const [didDeviceChange, setDidDeviceChange] = useState(false);
+  const { players, error } = useGetPlayers(roomId);
   const videoPlayerRef = useRef();
   const videoTrackRef = useRef();
   const audioTrackRef = useRef();
@@ -76,9 +76,17 @@ export function JoiningScreen({
   const micRef = useRef();
   const isMobile = useIsMobile();
 
-  useEffect(() => { webcamRef.current = webcamOn }, [webcamOn])
+  useEffect(() => {
+    console.log("players", players);
+  }, [players]);
 
-  useEffect(() => { micRef.current = micOn }, [micOn])
+  useEffect(() => {
+    webcamRef.current = webcamOn;
+  }, [webcamOn]);
+
+  useEffect(() => {
+    micRef.current = micOn;
+  }, [micOn]);
 
   useEffect(() => {
     permissonAvaialble.current = {
@@ -92,7 +100,6 @@ export function JoiningScreen({
       audioTrackRef.current = audioTrack;
       startMuteListener();
     }
-
   }, [micOn, audioTrack]);
 
   useEffect(() => {
@@ -104,7 +111,7 @@ export function JoiningScreen({
         !videoPlayerRef.current.paused &&
         !videoPlayerRef.current.ended &&
         videoPlayerRef.current.readyState >
-        videoPlayerRef.current.HAVE_CURRENT_DATA;
+          videoPlayerRef.current.HAVE_CURRENT_DATA;
 
       if (videoTrack) {
         const videoSrcObject = new MediaStream([videoTrack]);
@@ -135,7 +142,7 @@ export function JoiningScreen({
 
   useEffect(() => {
     checkMediaPermission();
-    return () => { };
+    return () => {};
   }, []);
 
   const _toggleWebcam = () => {
@@ -145,14 +152,14 @@ export function JoiningScreen({
       if (videoTrack) {
         videoTrack.stop();
         setVideoTrack(null);
-        setCustomVideoStream(null)
+        setCustomVideoStream(null);
         setWebcamOn(false);
       }
     } else {
       getDefaultMediaTracks({ mic: false, webcam: true });
       setWebcamOn(true);
     }
-  }
+  };
 
   const _toggleMic = () => {
     const audioTrack = audioTrackRef.current;
@@ -161,14 +168,14 @@ export function JoiningScreen({
       if (audioTrack) {
         audioTrack.stop();
         setAudioTrack(null);
-        setCustomAudioStream(null)
+        setCustomAudioStream(null);
         setMicOn(false);
       }
     } else {
       getDefaultMediaTracks({ mic: true, webcam: false });
       setMicOn(true);
     }
-  }
+  };
 
   const changeWebcam = async (deviceId) => {
     if (webcamOn) {
@@ -178,22 +185,21 @@ export function JoiningScreen({
       }
 
       const stream = await getVideoTrack({
-        webcamId: deviceId
-      })
+        webcamId: deviceId,
+      });
       setCustomVideoStream(stream);
       const videoTracks = stream?.getVideoTracks();
       const videoTrack = videoTracks.length ? videoTracks[0] : null;
       setVideoTrack(videoTrack);
     }
-
   };
   const changeMic = async (deviceId) => {
     if (micOn) {
       const currentAudioTrack = audioTrackRef.current;
       currentAudioTrack && currentAudioTrack.stop();
       const stream = await getAudioTrack({
-        micId: deviceId
-      })
+        micId: deviceId,
+      });
       setCustomAudioStream(stream);
       const audioTracks = stream?.getAudioTracks();
       const audioTrack = audioTracks.length ? audioTracks[0] : null;
@@ -205,23 +211,22 @@ export function JoiningScreen({
   const getDefaultMediaTracks = async ({ mic, webcam }) => {
     if (mic) {
       const stream = await getAudioTrack({
-        micId: selectedMic.id
-      })
+        micId: selectedMic.id,
+      });
       setCustomAudioStream(stream);
       const audioTracks = stream?.getAudioTracks();
       const audioTrack = audioTracks.length ? audioTracks[0] : null;
-      setAudioTrack(audioTrack)
+      setAudioTrack(audioTrack);
     }
 
     if (webcam) {
       const stream = await getVideoTrack({
-        webcamId: selectedWebcam.id
-      })
+        webcamId: selectedWebcam.id,
+      });
       setCustomVideoStream(stream);
       const videoTracks = stream?.getVideoTracks();
       const videoTrack = videoTracks.length ? videoTracks[0] : null;
       setVideoTrack(videoTrack);
-
     }
   };
 
@@ -267,7 +272,7 @@ export function JoiningScreen({
     }
   }
   function onDeviceChanged() {
-    setDidDeviceChange(true)
+    setDidDeviceChange(true);
     getCameraDevices();
     getAudioDevices();
     getDefaultMediaTracks({ mic: micRef.current, webcam: webcamRef.current });
@@ -288,7 +293,6 @@ export function JoiningScreen({
     if (microphonePermissionAllowed) {
       setMicOn(true);
       getDefaultMediaTracks({ mic: true, webcam: false });
-
     } else {
       await requestAudioVideoPermission(Constants.permission.AUDIO);
     }
@@ -304,7 +308,10 @@ export function JoiningScreen({
     try {
       if (permissonAvaialble.current?.isCameraPermissionAllowed) {
         let webcams = await getCameras();
-        setSelectedWebcam({ id: webcams[0]?.deviceId, label: webcams[0]?.label })
+        setSelectedWebcam({
+          id: webcams[0]?.deviceId,
+          label: webcams[0]?.label,
+        });
         setDevices((devices) => {
           return { ...devices, webcams };
         });
@@ -317,14 +324,16 @@ export function JoiningScreen({
   const getAudioDevices = async () => {
     try {
       if (permissonAvaialble.current?.isMicrophonePermissionAllowed) {
-
         let mics = await getMicrophones();
         let speakers = await getPlaybackDevices();
         const hasMic = mics.length > 0;
         if (hasMic) {
           startMuteListener();
         }
-        setSelectedSpeaker({ id: speakers[0]?.deviceId, label: speakers[0]?.label })
+        setSelectedSpeaker({
+          id: speakers[0]?.deviceId,
+          label: speakers[0]?.label,
+        });
         setSelectedMic({ id: mics[0]?.deviceId, label: mics[0]?.label });
         setDevices((devices) => {
           return { ...devices, mics, speakers };
@@ -359,7 +368,7 @@ export function JoiningScreen({
 
   return (
     <div className="fixed inset-0">
-      <div className="overflow-y-auto flex flex-col flex-1 h-screen bg-gray-800">
+      <div className="overflow-y-auto flex flex-col flex-1 h-screen bg-primary-dark">
         <div className="flex flex-1 flex-col md:flex-row items-center justify-center md:m-[72px] m-16">
           <div className="container grid  md:grid-flow-col grid-flow-row ">
             <div className="grid grid-cols-12">
@@ -438,9 +447,7 @@ export function JoiningScreen({
                             didDeviceChange={didDeviceChange}
                             setDidDeviceChange={setDidDeviceChange}
                           />
-                          <DropDownSpeaker
-                            speakers={speakers}
-                          />
+                          <DropDownSpeaker speakers={speakers} />
                           <DropDownCam
                             changeWebcam={changeWebcam}
                             webcams={webcams}
@@ -470,19 +477,16 @@ export function JoiningScreen({
                         setMeetingId(id);
                         onClickStartMeeting();
                       } else {
-                        toast(
-                          `${err}`,
-                          {
-                            position: "bottom-left",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeButton: false,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                          }
-                        );
+                        toast(`${err}`, {
+                          position: "bottom-left",
+                          autoClose: 4000,
+                          hideProgressBar: true,
+                          closeButton: false,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                        });
                       }
                     }}
                     _handleOnCreateMeeting={async () => {
@@ -493,7 +497,7 @@ export function JoiningScreen({
                         setToken(token);
                         setMeetingId(meetingId);
                       }
-                      return { meetingId: meetingId, err: err }
+                      return { meetingId: meetingId, err: err };
                     }}
                   />
                 </div>
