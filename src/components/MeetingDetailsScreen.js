@@ -57,7 +57,7 @@ export function MeetingDetailsScreen({
             className="px-4 py-3 bg-primary-light rounded-xl text-primary-red w-full text-center"
           />
           {meetingIdError && (
-            <p className="text-xs  text-red-600">{`Please enter valid meetingId`}</p>
+            <p className="text-xs  text-red-600">{`Пожалуйста введите верный код комнаты`}</p>
           )}
         </>
       ) : null}
@@ -86,7 +86,7 @@ export function MeetingDetailsScreen({
             }}
           >
             {iscreateMeetingClicked
-              ? "Start a meeting"
+              ? "Создать видео комнату"
               : "Присоединится к комнате"}
           </button>
         </>

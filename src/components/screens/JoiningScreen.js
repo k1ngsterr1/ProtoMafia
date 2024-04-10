@@ -430,7 +430,6 @@ export function JoiningScreen({
                         </div>
                       </div>
                     </div>
-
                     {!isMobile && (
                       <>
                         <div className="absolute top-2 right-10">

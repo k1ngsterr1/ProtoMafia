@@ -21,7 +21,7 @@ const ChatMessage = ({ senderId, senderName, text, timestamp }) => {
         } flex-col py-1 px-2 rounded-md bg-gray-700`}
       >
         <p style={{ color: "#ffffff80" }}>
-          {localSender ? "You" : nameTructed(senderName, 15)}
+          {localSender ? "Вы" : nameTructed(senderName, 15)}
         </p>
         <div>
           <p className="inline-block whitespace-pre-wrap break-words text-right text-white">
@@ -75,7 +75,7 @@ const ChatInput = ({ inputHeight }) => {
         <input
           type="text"
           className="py-4 text-base text-white border-gray-400 border bg-gray-750 rounded pr-10 pl-2 focus:outline-none w-full"
-          placeholder="Write your message"
+          placeholder="Напишите ваше сообщение"
           autocomplete="off"
           ref={input}
           value={message}

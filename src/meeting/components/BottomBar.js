@@ -1,4 +1,9 @@
-import { Constants, useMeeting, usePubSub, useMediaDevice } from "@videosdk.live/react-sdk";
+import {
+  Constants,
+  useMeeting,
+  usePubSub,
+  useMediaDevice,
+} from "@videosdk.live/react-sdk";
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   ClipboardIcon,
@@ -16,6 +21,7 @@ import WebcamOffIcon from "../../icons/Bottombar/WebcamOffIcon";
 import ScreenShareIcon from "../../icons/Bottombar/ScreenShareIcon";
 import ChatIcon from "../../icons/Bottombar/ChatIcon";
 import ParticipantsIcon from "../../icons/Bottombar/ParticipantsIcon";
+import DayIcon from "../../icons/Bottombar/DayIcon";
 import EndIcon from "../../icons/Bottombar/EndIcon";
 import RaiseHandIcon from "../../icons/Bottombar/RaiseHandIcon";
 import PipIcon from "../../icons/Bottombar/PipIcon";
@@ -28,7 +34,13 @@ import { Dialog, Popover, Transition } from "@headlessui/react";
 import { createPopper } from "@popperjs/core";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
 import useMediaStream from "../../hooks/useMediaStream";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronDown,
+  faChevronUp,
+  faMoon,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -155,16 +167,14 @@ const MicBTN = () => {
     setSelectedMic,
     selectedSpeaker,
     setSelectedSpeaker,
-    isMicrophonePermissionAllowed
-  } = useMeetingAppContext()
+    isMicrophonePermissionAllowed,
+  } = useMeetingAppContext();
 
-  const {
-     getMicrophones, getPlaybackDevices
-  } = useMediaDevice();
+  const { getMicrophones, getPlaybackDevices } = useMediaDevice();
 
   const mMeeting = useMeeting();
   const [mics, setMics] = useState([]);
-  const [speakers, setSpeakers] = useState([])
+  const [speakers, setSpeakers] = useState([]);
   const localMicOn = mMeeting?.localMicOn;
   const changeMic = mMeeting?.changeMic;
 
@@ -173,7 +183,7 @@ const MicBTN = () => {
     const speakers = await getPlaybackDevices();
 
     mics && mics?.length && setMics(mics);
-    speakers && speakers?.length && setSpeakers(speakers)
+    speakers && speakers?.length && setSpeakers(speakers);
   };
 
   const [tooltipShow, setTooltipShow] = useState(false);
@@ -193,7 +203,9 @@ const MicBTN = () => {
     <>
       <OutlinedButton
         Icon={localMicOn ? MicOnIcon : MicOffIcon}
-        onClick={() => { mMeeting.toggleMic() }}
+        onClick={() => {
+          mMeeting.toggleMic();
+        }}
         bgColor={localMicOn ? "bg-gray-750" : "bg-white"}
         borderColor={localMicOn && "#ffffff33"}
         isFocused={localMicOn}
@@ -205,14 +217,19 @@ const MicBTN = () => {
               <Popover className="relative">
                 {({ close }) => (
                   <>
-                    <Popover.Button disabled={!isMicrophonePermissionAllowed} className="flex items-center justify-center mt-1 mr-1 focus:outline-none">
+                    <Popover.Button
+                      disabled={!isMicrophonePermissionAllowed}
+                      className="flex items-center justify-center mt-1 mr-1 focus:outline-none"
+                    >
                       <div
                         ref={btnRef}
                         onMouseEnter={openTooltip}
                         onMouseLeave={closeTooltip}
                       >
                         <button
-                          onClick={() => { getMics() }}
+                          onClick={() => {
+                            getMics();
+                          }}
                         >
                           <ChevronDownIcon
                             className="h-4 w-4"
@@ -244,14 +261,16 @@ const MicBTN = () => {
                               <div className="flex flex-col">
                                 {mics.map(({ deviceId, label }, index) => (
                                   <div
-                                    className={`px-3 py-1 my-1 pl-6 text-white text-left ${deviceId === selectedMic.id &&
+                                    className={`px-3 py-1 my-1 pl-6 text-white text-left ${
+                                      deviceId === selectedMic.id &&
                                       "bg-gray-150"
-                                      }`}
+                                    }`}
                                   >
                                     <button
-                                      className={`flex flex-1 w-full text-left ${deviceId === selectedMic.id &&
+                                      className={`flex flex-1 w-full text-left ${
+                                        deviceId === selectedMic.id &&
                                         "bg-gray-150"
-                                        }`}
+                                      }`}
                                       key={`mics_${deviceId}`}
                                       onClick={() => {
                                         setSelectedMic({ id: deviceId });
@@ -265,7 +284,7 @@ const MicBTN = () => {
                                 ))}
                               </div>
                             </div>
-                            <hr className='border border-gray-50 mt-2 mb-1' />
+                            <hr className="border border-gray-50 mt-2 mb-1" />
                             <div>
                               <div className="flex p-3 pb-0">
                                 <p className="ml-3 text-sm text-gray-900  text-center">
@@ -275,14 +294,16 @@ const MicBTN = () => {
                               <div className="flex flex-col ">
                                 {speakers.map(({ deviceId, label }, index) => (
                                   <div
-                                    className={`px-3 py-1 my-1 pl-6 text-white ${deviceId === selectedSpeaker.id &&
+                                    className={`px-3 py-1 my-1 pl-6 text-white ${
+                                      deviceId === selectedSpeaker.id &&
                                       "bg-gray-150"
-                                      }`}
+                                    }`}
                                   >
                                     <button
-                                      className={`flex flex-1 w-full text-left ${deviceId === selectedSpeaker.id &&
+                                      className={`flex flex-1 w-full text-left ${
+                                        deviceId === selectedSpeaker.id &&
                                         "bg-gray-150"
-                                        }`}
+                                      }`}
                                       key={`speakers_${deviceId}`}
                                       onClick={() => {
                                         setSelectedSpeaker({ id: deviceId });
@@ -295,10 +316,8 @@ const MicBTN = () => {
                                 ))}
                               </div>
                             </div>
-
                           </div>
                         </div>
-
                       </Popover.Panel>
                     </Transition>
                   </>
@@ -306,14 +325,13 @@ const MicBTN = () => {
               </Popover>
               <div
                 style={{ zIndex: 999 }}
-                className={`${tooltipShow ? "" : "hidden"
-                  } overflow-hidden flex flex-col items-center justify-center pb-4`}
+                className={`${
+                  tooltipShow ? "" : "hidden"
+                } overflow-hidden flex flex-col items-center justify-center pb-4`}
                 ref={tooltipRef}
               >
                 <div className={"rounded-md p-1.5 bg-black "}>
-                  <p className="text-base text-white ">
-                    {"Change microphone"}
-                  </p>
+                  <p className="text-base text-white ">{"Change microphone"}</p>
                 </div>
               </div>
             </>
@@ -325,12 +343,9 @@ const MicBTN = () => {
 };
 
 const WebCamBTN = () => {
-  const {
-    selectedWebcam,
-    setSelectedWebcam,
-    isCameraPermissionAllowed,
-  } = useMeetingAppContext()
-  const {getCameras} = useMediaDevice();
+  const { selectedWebcam, setSelectedWebcam, isCameraPermissionAllowed } =
+    useMeetingAppContext();
+  const { getCameras } = useMediaDevice();
   const mMeeting = useMeeting();
   const [webcams, setWebcams] = useState([]);
   const { getVideoTrack } = useMediaStream();
@@ -365,7 +380,7 @@ const WebCamBTN = () => {
           let track;
           if (!localWebcamOn) {
             track = await getVideoTrack({
-              webcamId: selectedWebcam.id
+              webcamId: selectedWebcam.id,
             });
           }
           mMeeting.toggleWebcam(track);
@@ -381,14 +396,19 @@ const WebCamBTN = () => {
               <Popover className="relative">
                 {({ close }) => (
                   <>
-                    <Popover.Button disabled={!isCameraPermissionAllowed} className="flex items-center justify-center mt-1 mr-1 focus:outline-none">
+                    <Popover.Button
+                      disabled={!isCameraPermissionAllowed}
+                      className="flex items-center justify-center mt-1 mr-1 focus:outline-none"
+                    >
                       <div
                         ref={btnRef}
                         onMouseEnter={openTooltip}
                         onMouseLeave={closeTooltip}
                       >
                         <button
-                          onClick={() => { getWebcams() }}
+                          onClick={() => {
+                            getWebcams();
+                          }}
                         >
                           <ChevronDownIcon
                             className="h-4 w-4"
@@ -420,14 +440,16 @@ const WebCamBTN = () => {
                               <div className="flex flex-col">
                                 {webcams.map(({ deviceId, label }, index) => (
                                   <div
-                                    className={`px-3 py-1 my-1 pl-6 text-white ${deviceId === selectedWebcam.id &&
+                                    className={`px-3 py-1 my-1 pl-6 text-white ${
+                                      deviceId === selectedWebcam.id &&
                                       "bg-gray-150"
-                                      }`}
+                                    }`}
                                   >
                                     <button
-                                      className={`flex flex-1 w-full text-left ${deviceId === selectedWebcam.id &&
+                                      className={`flex flex-1 w-full text-left ${
+                                        deviceId === selectedWebcam.id &&
                                         "bg-gray-150"
-                                        }`}
+                                      }`}
                                       key={`output_webcams_${deviceId}`}
                                       onClick={() => {
                                         setSelectedWebcam({ id: deviceId });
@@ -450,8 +472,9 @@ const WebCamBTN = () => {
               </Popover>
               <div
                 style={{ zIndex: 999 }}
-                className={`${tooltipShow ? "" : "hidden"
-                  } overflow-hidden flex flex-col items-center justify-center pb-4`}
+                className={`${
+                  tooltipShow ? "" : "hidden"
+                } overflow-hidden flex flex-col items-center justify-center pb-4`}
                 ref={tooltipRef}
               >
                 <div className={"rounded-md p-1.5 bg-black "}>
@@ -466,12 +489,24 @@ const WebCamBTN = () => {
   );
 };
 
-export function BottomBar({
-  bottomBarHeight,
-  setIsMeetingLeft
-}) {
- 
+const Tooltip = ({ children, text }) => {
+  return (
+    <div className="relative flex flex-col items-center group">
+      {children}
+      <div className="absolute bottom-full mb-2 hidden group-hover:block">
+        <div className="bg-black text-base  text-white  rounded py-1 px-2 right-0 ">
+          {text}
+        </div>
+        <div className="w-3 h-3 bg-black rotate-45 transform origin-bottom-right -translate-y-1/2 group-hover:block" />
+      </div>
+    </div>
+  );
+};
+
+export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
+  const [time, setTime] = useState();
+
   const RaiseHandBTN = ({ isMobile, isTab }) => {
     const { publish } = usePubSub("RAISE_HAND");
     const RaiseHand = () => {
@@ -481,15 +516,15 @@ export function BottomBar({
     return isMobile || isTab ? (
       <MobileIconButton
         id="RaiseHandBTN"
-        tooltipTitle={"Raise hand"}
+        tooltipTitle={"Поднять руку"}
         Icon={RaiseHandIcon}
         onClick={RaiseHand}
-        buttonText={"Raise Hand"}
+        buttonText={"Поднять руку"}
       />
     ) : (
       <OutlinedButton
         onClick={RaiseHand}
-        tooltip={"Raise Hand"}
+        tooltip={"Поднять руку"}
         Icon={RaiseHandIcon}
       />
     );
@@ -541,22 +576,20 @@ export function BottomBar({
         isFocused={isRecording}
         tooltip={
           recordingState === Constants.recordingEvents.RECORDING_STARTED
-            ? "Stop Recording"
+            ? "Остановить запись"
             : recordingState === Constants.recordingEvents.RECORDING_STARTING
-              ? "Starting Recording"
-              : recordingState === Constants.recordingEvents.RECORDING_STOPPED
-                ? "Start Recording"
-                : recordingState === Constants.recordingEvents.RECORDING_STOPPING
-                  ? "Stopping Recording"
-                  : "Start Recording"
+            ? "Начать запись"
+            : recordingState === Constants.recordingEvents.RECORDING_STOPPED
+            ? "Начать запись"
+            : recordingState === Constants.recordingEvents.RECORDING_STOPPING
+            ? "Остановить запись"
+            : "Начать запись"
         }
         lottieOption={isRecording ? defaultOptions : null}
         isRequestProcessing={isRequestProcessing}
       />
     );
   };
-
- 
 
   const ScreenShareBTN = ({ isMobile, isTab }) => {
     const { localScreenShareOn, toggleScreenShare, presenterId } = useMeeting();
@@ -567,16 +600,16 @@ export function BottomBar({
         tooltipTitle={
           presenterId
             ? localScreenShareOn
-              ? "Stop Presenting"
+              ? "Прекратить презентацию"
               : null
-            : "Present Screen"
+            : "Поделиться экраном"
         }
         buttonText={
           presenterId
             ? localScreenShareOn
-              ? "Stop Presenting"
+              ? "Прекратить презентацию"
               : null
-            : "Present Screen"
+            : "Поделиться экраном"
         }
         isFocused={localScreenShareOn}
         Icon={ScreenShareIcon}
@@ -589,8 +622,8 @@ export function BottomBar({
               ? false
               : true
             : isMobile
-              ? true
-              : false
+            ? true
+            : false
         }
       />
     ) : (
@@ -631,8 +664,8 @@ export function BottomBar({
   const ChatBTN = ({ isMobile, isTab }) => {
     return isMobile || isTab ? (
       <MobileIconButton
-        tooltipTitle={"Chat"}
-        buttonText={"Chat"}
+        tooltipTitle={"Чат"}
+        buttonText={"Чат"}
         Icon={ChatIcon}
         isFocused={sideBarMode === sideBarModes.CHAT}
         onClick={() => {
@@ -650,7 +683,7 @@ export function BottomBar({
           );
         }}
         isFocused={sideBarMode === "CHAT"}
-        tooltip="View Chat"
+        tooltip="Чат"
       />
     );
   };
@@ -659,9 +692,9 @@ export function BottomBar({
     const { participants } = useMeeting();
     return isMobile || isTab ? (
       <MobileIconButton
-        tooltipTitle={"Participants"}
+        tooltipTitle={"Участники"}
         isFocused={sideBarMode === sideBarModes.PARTICIPANTS}
-        buttonText={"Participants"}
+        buttonText={"Участники"}
         disabledOpacity={1}
         Icon={ParticipantsIcon}
         onClick={() => {
@@ -680,7 +713,7 @@ export function BottomBar({
           );
         }}
         isFocused={sideBarMode === sideBarModes.PARTICIPANTS}
-        tooltip={"View \nParticipants"}
+        tooltip={"Все участники"}
         badge={`${new Map(participants)?.size}`}
       />
     );
@@ -711,6 +744,81 @@ export function BottomBar({
           </button>
         </div>
       </div>
+    );
+  };
+
+  const DayButton = () => {
+    const handleClick = () => {
+      setTime("Day");
+    };
+
+    return (
+      <Tooltip text={"Поставить день"}>
+        <button
+          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] focus:outline-none focus:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faSun} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
+  const PlayerSelector = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const players = [
+      "Player 1",
+      "Player 2",
+      "Player 3",
+      "Player 4",
+      "Player 5",
+      "Player 6",
+    ];
+
+    return (
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {players.map((player) => (
+                <li
+                  key={player}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {player}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Дать фолл</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
+        </button>
+      </div>
+    );
+  };
+
+  const NightButton = () => {
+    const handleClick = () => {
+      setTime("Night");
+    };
+
+    return (
+      <Tooltip text={"Поставить ночь"}>
+        <button
+          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] focus:outline-none focus:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faMoon} className="text-white text-xl" />
+        </button>
+      </Tooltip>
     );
   };
 
@@ -798,10 +906,11 @@ export function BottomBar({
                       {otherFeatures.map(({ icon }) => {
                         return (
                           <div
-                            className={`grid items-center justify-center ${icon === BottomBarButtonTypes.MEETING_ID_COPY
-                              ? "col-span-7 sm:col-span-5 md:col-span-3"
-                              : "col-span-4 sm:col-span-3 md:col-span-2"
-                              }`}
+                            className={`grid items-center justify-center ${
+                              icon === BottomBarButtonTypes.MEETING_ID_COPY
+                                ? "col-span-7 sm:col-span-5 md:col-span-3"
+                                : "col-span-4 sm:col-span-3 md:col-span-2"
+                            }`}
                           >
                             {icon === BottomBarButtonTypes.RAISE_HAND ? (
                               <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
@@ -844,6 +953,9 @@ export function BottomBar({
 
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         <RecordingBTN />
+        <DayButton />
+        <NightButton />
+        <PlayerSelector />
         <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
         <MicBTN />
         <WebCamBTN />
