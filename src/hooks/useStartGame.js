@@ -1,5 +1,4 @@
-import { Axios } from "axios";
-import { start } from "repl";
+import { axios } from "axios";
 
 export const useStartGame = () => {
   const startGame = async ({ roomId }) => {

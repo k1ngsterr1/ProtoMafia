@@ -50,6 +50,8 @@ import { useKickPlayer } from "../../hooks/useKickPlayer";
 
 import Cookies from "js-cookie";
 import { useGetRole } from "../../hooks/useGetRole";
+import { useSendFall } from "../../hooks/useSendFall";
+import { useCheckRole } from "../../hooks/useCheckRole";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -517,16 +519,59 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const userData = Cookies.get("userData");
   const userDataString = userData ? JSON.parse(userData) : null;
   const kickPlayer = useKickPlayer();
-  const getRole = useGetRole();
+  const sendFall = useSendFall();
+  const checkRole = useCheckRole();
+  const { getRole, role } = useGetRole();
   const { players } = useGetPlayers(roomId);
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
   const [time, setTime] = useState();
+  const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const communicateWithDon = () => {
+    if (userDataObject && userDataObject.role !== "Don") {
+      setIsDisabled(true);
+    }
+  };
+
+  const resetUI = () => {
+    setIsDisabled(false);
+  };
 
   useEffect(() => {
     getRole(roomId, userDataString.id);
   });
+
+  useEffect(() => {});
+
+  const checkRoleDonAndDisableUI = () => {
+    if (userDataString) {
+      setIsDisabled(
+        userDataString.gameRole !== "Don" || userDataString.role !== "showman"
+      );
+
+      console.log(userDataString.gameRole);
+    }
+    setIsBlackRectangleVisible(true);
+  };
+
+  const checkRoleSheriffAndDisableUI = async () => {
+    try {
+      const response = await checkRole();
+
+      if (response && response.role === "Don") {
+        setIsUIEnabled(false);
+      } else {
+        setIsUIEnabled(true);
+      }
+    } catch (error) {
+      console.error("Error checking user role:", error);
+    } finally {
+      setIsLoading(false); // Set loading state to false after request completes
+    }
+  };
 
   const RaiseHandBTN = ({ isMobile, isTab }) => {
     const { publish } = usePubSub("RAISE_HAND");
@@ -788,7 +833,9 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   };
 
   const DonButton = () => {
-    const handleClick = () => {};
+    const handleClick = () => {
+      checkRoleDonAndDisableUI();
+    };
 
     return (
       <Tooltip text={"Познакомиться с Доном"}>
@@ -803,7 +850,9 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   };
 
   const SheriffButton = () => {
-    const handleClick = () => {};
+    const handleClick = () => {
+      checkRoleSheriffAndDisableUI();
+    };
 
     return (
       <Tooltip text={"Познакомиться с Шерифом"}>
@@ -853,6 +902,11 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const PlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const handleClick = (roomID, playerId) => {
+      console.log(roomID);
+      sendFall(roomID, playerId);
+    };
+
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
@@ -862,6 +916,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
                 <li
                   key={player.id}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  onClick={() => handleClick(roomId, player.id)}
                 >
                   {player.username}
                 </li>
@@ -886,8 +941,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const KickSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClick = (playerId) => {
-      kickPlayer(playerId);
+    const handleClick = (roomId, playerId) => {
+      kickPlayer(roomId, playerId);
     };
 
     return (
@@ -898,7 +953,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
               {players.map((player) => (
                 <li
                   key={player.id}
-                  onClick={() => kickPlayer(player.id)}
+                  onClick={() => kickPlayer(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -941,6 +996,14 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
+  const RoleTab = ({ role }) => {
+    return (
+      <div className="relative flex items-center justify-center bg-gray-800 p-2 rounded-lg border-2 border-[#ffffff33] ml-2">
+        <span className="text-primary-red  font-killbill text-2xl">{role}</span>
+      </div>
+    );
+  };
+
   const MafiaButton = () => {
     const handleClick = () => {
       setShowPopup(true);
@@ -958,6 +1021,44 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           <FontAwesomeIcon icon={faHatCowboy} className="text-white text-xl" />
         </button>
       </Tooltip>
+    );
+  };
+
+  const MafiaSelectorForSheriff = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleClick = (playerId) => {
+      kickPlayer(playerId);
+    };
+
+    return (
+      <div className="relative inline-block bg-gray-750  rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {players.map((player) => (
+                <li
+                  key={player.id}
+                  onClick={() => kickPlayer(player.id)}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Выберите мафиози</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
+        </button>
+      </div>
     );
   };
 
@@ -1029,6 +1130,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     >
       <LeaveBTN />
       <MicBTN />
+      {isDisabled && <div></div>}
       {userDataString.role == "showman" && (
         <>
           <DayButton />
@@ -1039,6 +1141,16 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           <StartButton />
           <PlayerSelector />
           <KickSelector />
+        </>
+      )}
+      {role === "Sheriff" && (
+        <>
+          <MafiaSelectorForSheriff />
+        </>
+      )}
+      {role === "Mafia" && (
+        <>
+          <KillPlayerSelector />
         </>
       )}
       <WebCamBTN />
@@ -1124,8 +1236,27 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   ) : (
     <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidden">
       <MeetingIdCopyBTN />
+      {isBlackRectangleVisible && (
+        <div className="absolute inset-0 bg-black opacity-0 z-50"></div>
+      )}
+
+      {userDataString.role !== "showman" && (
+        <>
+          <RoleTab role={role} />
+        </>
+      )}
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         <RecordingBTN />
+        {role === "Sheriff" && (
+          <>
+            <MafiaSelectorForSheriff />
+          </>
+        )}
+        {role === "Mafia" && (
+          <>
+            <KillPlayerSelector />
+          </>
+        )}
         {userDataString.role == "showman" && (
           <>
             <DayButton />

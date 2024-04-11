@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
 
-export function useGetRole() {
+export function useCheckRole() {
   const [role, setRole] = useState();
 
-  const getRole = async (roomId, userId) => {
+  const checkRole = async (roomId, userId, targetRole) => {
     try {
-      const response = await axios.get(
-        `https://showtime.up.railway.app/api/game/get-role/${roomId}/${userId}`
+      const response = await axios.post(
+        `https://showtime.up.railway/api/game/check-role/${roomId}/${userId}`,
+        {
+          targetRole: targetRole,
+        }
       );
 
       setRole(response.data.user.gameRole);
@@ -17,5 +20,5 @@ export function useGetRole() {
     }
   };
 
-  return { getRole, role };
+  return { checkRole, role };
 }
