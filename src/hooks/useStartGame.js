@@ -1,10 +1,10 @@
-import { axios } from "axios";
+import axios from "axios";
 
 export const useStartGame = () => {
   const startGame = async ({ roomId }) => {
     try {
       const response = await axios.post(
-        `https://showtime.up.railway.app/api/game/start-game/${roomId}`
+        `https://showtime.up.railway.app/api/game/start-game/1`
       );
 
       console.log("Data from starting the game:", response.data);

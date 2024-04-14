@@ -28,7 +28,7 @@ function OnlineApp() {
   useEffect(() => {
     if (isMobile) {
       window.onbeforeunload = () => {
-        return "Are you sure you want to exit?";
+        return "Вы уверены что хотите выйти?";
       };
     }
   }, [isMobile]);

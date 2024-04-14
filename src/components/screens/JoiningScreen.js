@@ -59,7 +59,7 @@ export function JoiningScreen({
     requestPermission,
     getPlaybackDevices,
   } = useMediaDevice({ onDeviceChanged });
-  const roomIdString = Cookies.get("roomId");
+  const roomIdString = localStorage.getItem("roomId");
   const roomId = roomIdString ? JSON.parse(roomIdString) : null;
   const [audioTrack, setAudioTrack] = useState(null);
   const [videoTrack, setVideoTrack] = useState(null);

@@ -45,6 +45,9 @@ import {
   faShield,
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
+
+import { socket } from "../../hooks/socketService";
+
 import { useGetPlayers } from "../../hooks/useGetPlayers";
 import { useKickPlayer } from "../../hooks/useKickPlayer";
 
@@ -52,6 +55,9 @@ import Cookies from "js-cookie";
 import { useGetRole } from "../../hooks/useGetRole";
 import { useSendFall } from "../../hooks/useSendFall";
 import { useCheckRole } from "../../hooks/useCheckRole";
+import { useStartNight } from "../../hooks/useStartNight";
+import { useStartDay } from "../../hooks/useStartDay";
+import { useWakeUpMafia } from "../../hooks/useWakeUpMafia";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -515,14 +521,17 @@ const Tooltip = ({ children, text }) => {
 };
 
 export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
-  const roomId = Cookies.get("roomId");
-  const userData = Cookies.get("userData");
+  const roomId = localStorage.getItem("roomId");
+  const userData = localStorage.getItem("userData");
   const userDataString = userData ? JSON.parse(userData) : null;
   const kickPlayer = useKickPlayer();
   const sendFall = useSendFall();
+  const startNight = useStartNight();
+  const wakeUpMafia = useWakeUpMafia();
+  const startDay = useStartDay();
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
-  const { players } = useGetPlayers(roomId);
+  const { players } = useGetPlayers(2);
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
   const [time, setTime] = useState();
   const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
@@ -536,6 +545,53 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     }
   };
 
+  useEffect(() => {
+    socket.on("kicked", (data) => {
+      alert(data.message);
+      window.location.href = "https://samigroup.kz";
+    });
+
+    return () => {
+      socket.off("kicked");
+    };
+  }, []);
+
+  socket.on("nightStarted", () => {
+    console.log("Night has begun. Everyone should wait.");
+    setIsDisabled(true);
+  });
+
+  socket.on("dayStarted", () => {
+    console.log("Day is here!");
+    setIsDisabled(false);
+  });
+
+  socket.on("wakeUpMafia", (data) => {
+    if (role === "Mafia") {
+      setIsDisabled(false);
+    }
+  });
+
+  socket.on("connect_error", (error) => {
+    console.log("Connection failed:", error);
+  });
+
+  socket.emit("checkMessage", (data) => {
+    console.log("socket emit is working");
+  });
+
+  socket.on("wakeUpMafia", (data) => {
+    console.log("Mafia wake up!");
+  });
+
+  socket.on("disableUI", (data) => {
+    console.log(data.message);
+  });
+
+  socket.on("dayStarted", () => {
+    console.log("Day has begun. Everyone participates.");
+  });
+
   const resetUI = () => {
     setIsDisabled(false);
   };
@@ -544,7 +600,49 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     getRole(roomId, userDataString.id);
   });
 
-  useEffect(() => {});
+  useEffect(() => {
+    socket.on("userWarned", (data) => {
+      console.log(`user has been warned! ${data.userID}`);
+    });
+    return () => {
+      socket.off("dayStarted");
+      socket.off("nightStarted");
+      socket.off("wakeUpMafia");
+      socket.off("userWarned");
+    };
+  }, []);
+
+  const [isUIDisabled, setUIDisabled] = useState(false);
+
+  useEffect(() => {
+    const handleNightStarted = () => {
+      console.log("Night has started");
+      setUIDisabled(true);
+    };
+
+    const handleDayStarted = () => {
+      console.log("Day has started");
+      setUIDisabled(false);
+    };
+
+    const handleToggleUI = (data) => {
+      setUIDisabled(data.disable);
+    };
+
+    socket.on("nightStarted", handleNightStarted);
+    socket.on("dayStarted", handleDayStarted);
+    socket.on("toggleUI", handleToggleUI);
+
+    return () => {
+      socket.off("nightStarted", handleNightStarted);
+      socket.off("dayStarted", handleDayStarted);
+      socket.off("toggleUI", handleToggleUI);
+    };
+  }, []);
+
+  socket.on("dayStarted", () => {
+    console.log("Day has been started from the socket!");
+  });
 
   const checkRoleDonAndDisableUI = () => {
     if (userDataString) {
@@ -569,7 +667,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     } catch (error) {
       console.error("Error checking user role:", error);
     } finally {
-      setIsLoading(false); // Set loading state to false after request completes
+      setIsLoading(false);
     }
   };
 
@@ -813,32 +911,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
-  const DayButton = () => {
-    const handleClick = () => {
-      setTime("Day");
-      setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 2500);
-    };
-
-    return (
-      <Tooltip text={"Поставить день"}>
-        <button
-          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
-          onClick={handleClick}
-        >
-          <FontAwesomeIcon icon={faSun} className="text-white text-xl" />
-        </button>
-      </Tooltip>
-    );
-  };
-
   const DonButton = () => {
     const handleClick = () => {
       checkRoleDonAndDisableUI();
     };
 
     return (
-      <Tooltip text={"Познакомиться с Доном"}>
+      <Tooltip text={"Разубдить Дона"}>
         <button
           className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
           onClick={handleClick}
@@ -855,7 +934,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     };
 
     return (
-      <Tooltip text={"Познакомиться с Шерифом"}>
+      <Tooltip text={"Разбудить Шерифа"}>
         <button
           className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
           onClick={handleClick}
@@ -890,6 +969,39 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           onClick={() => setIsOpen(!isOpen)}
         >
           <span>Убить игрока</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
+        </button>
+      </div>
+    );
+  };
+
+  const VotePlayerSelector = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {players.map((player) => (
+                <li
+                  key={player.id}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Проголосовать</span>
           <FontAwesomeIcon
             icon={isOpen ? faChevronDown : faChevronUp}
             className="text-xs"
@@ -979,8 +1091,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const NightButton = () => {
     const handleClick = () => {
       setTime("Night");
-
       setShowPopup(true);
+      startNight();
       setTimeout(() => setShowPopup(false), 2500);
     };
 
@@ -996,24 +1108,61 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
+  const DayButton = () => {
+    const handleClick = () => {
+      setTime("Day");
+      startDay();
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 2500);
+    };
+
+    return (
+      <Tooltip text={"Поставить день"}>
+        <button
+          className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faSun} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
   const RoleTab = ({ role }) => {
+    let translatedRole;
+    switch (role) {
+      case "Innocent":
+        translatedRole = "Мирный";
+        break;
+      case "Mafia":
+        translatedRole = "Мафия";
+        break;
+      case "Don":
+        translatedRole = "Дон";
+        break;
+      case "Sheriff":
+        translatedRole = "Шерифф";
+        break;
+      default:
+        translatedRole = role;
+    }
     return (
       <div className="relative flex items-center justify-center bg-gray-800 p-2 rounded-lg border-2 border-[#ffffff33] ml-2">
-        <span className="text-primary-red  font-killbill text-2xl">{role}</span>
+        <span className="text-primary-red  font-killbill text-2xl">
+          {translatedRole}
+        </span>
       </div>
     );
   };
 
   const MafiaButton = () => {
     const handleClick = () => {
-      setShowPopup(true);
-      setMafiaTime(true);
-      setTimeout(() => setMafiaTime(false), 2500);
-      setTimeout(() => setShowPopup(false), 2500);
+      wakeUpMafia();
+      console.log("Кнопка вроде как работает");
     };
 
     return (
-      <Tooltip text={"Познакомить Мафию"}>
+      <Tooltip text={"Разбудить Мафию"}>
         <button
           className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] focus:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
           onClick={handleClick}
@@ -1060,6 +1209,14 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         </button>
       </div>
     );
+  };
+
+  const NightCounter = () => {
+    const [counter, setCounter] = useState(0);
+
+    useEffect(() => {
+      socket.on("night");
+    });
   };
 
   const StartButton = () => {
@@ -1123,6 +1280,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     { icon: BottomBarButtonTypes.MEETING_ID_COPY },
   ];
 
+  console.log("isDisabled is here:", isDisabled);
+
   return isMobile || isTab ? (
     <div
       className="flex items-center justify-center"
@@ -1130,7 +1289,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     >
       <LeaveBTN />
       <MicBTN />
-      {isDisabled && <div></div>}
+      {isDisabled && userDataString.role !== "showman" && (
+        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center">
+          <span className="text-primary-red font-killbill text-5xl">
+            Сейчас ночь...
+          </span>
+        </div>
+      )}
       {userDataString.role == "showman" && (
         <>
           <DayButton />
@@ -1150,7 +1315,12 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       )}
       {role === "Mafia" && (
         <>
-          <KillPlayerSelector />
+          <VotePlayerSelector />
+        </>
+      )}
+      {role === "Innocent" && (
+        <>
+          <PlayerSelector />
         </>
       )}
       <WebCamBTN />
@@ -1234,16 +1404,19 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Transition>
     </div>
   ) : (
-    <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidden">
+    <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidde">
       <MeetingIdCopyBTN />
-      {isBlackRectangleVisible && (
-        <div className="absolute inset-0 bg-black opacity-0 z-50"></div>
-      )}
-
       {userDataString.role !== "showman" && (
         <>
           <RoleTab role={role} />
         </>
+      )}
+      {isDisabled && userDataString.role !== "showman" && (
+        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center">
+          <span className="text-primary-red font-killbill text-5xl">
+            Сейчас ночь...
+          </span>
+        </div>
       )}
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         <RecordingBTN />
@@ -1255,6 +1428,11 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         {role === "Mafia" && (
           <>
             <KillPlayerSelector />
+          </>
+        )}
+        {role === "Innocent" && (
+          <>
+            <VotePlayerSelector />
           </>
         )}
         {userDataString.role == "showman" && (

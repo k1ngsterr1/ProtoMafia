@@ -5,22 +5,23 @@ export function useGetPlayers(roomId) {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    console.log("roomID in useGetPlayers:", roomId);
+    console.log("roomID in useGetPlayers:", 2);
 
     const fetchPlayers = async () => {
       try {
         const response = await axios.get(
-          `https://showtime.up.railway.app/api/rooms/${roomId}/users`
+          `http://localhost:4200/api/rooms/1/users`
         );
+        console.log("zhopa:", response.data);
         setPlayers(response.data.users);
       } catch (error) {
         console.error(error);
       }
     };
 
-    if (roomId) {
-      fetchPlayers();
-    }
+    // if (roomId) {
+    fetchPlayers();
+    // }
   }, [roomId]);
 
   return { players };

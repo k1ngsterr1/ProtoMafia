@@ -16,7 +16,31 @@ export function MeetingDetailsScreen({
   const [iscreateMeetingClicked, setIscreateMeetingClicked] = useState(false);
   const [isJoinMeetingClicked, setIsJoinMeetingClicked] = useState(false);
 
-  const userDataString = Cookies.get("userData");
+  window.addEventListener("message", () => {
+    console.log("message coming here!");
+  });
+
+  window.addEventListener("message", function (event) {
+    // Check the origin for security purposes
+    // if (
+    //   event.origin != "http://localhost:3000" ||
+    //   "https://recursing-saha.185-98-5-231.plesk.page"
+    // ) {
+    //   console.error("Received message from unauthorized origin:", event.origin);
+    //   return;
+    // }
+
+    if (event.data.refreshToken && event.data.userData) {
+      console.log("message is here!");
+
+      localStorage.setItem("refreshToken", event.data.refreshToken);
+      localStorage.setItem("userData", event.data.userData);
+      console.log("Refresh Token:", event.data.refreshToken);
+      console.log("User Data:", event.data.userData);
+    }
+  });
+
+  const userDataString = localStorage.getItem("userData");
 
   const userData = userDataString ? JSON.parse(userDataString) : null;
 

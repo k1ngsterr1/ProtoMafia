@@ -70,7 +70,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/OnlineApp" element={<OnlineApp />} />
+      <Route path="/" element={<OnlineApp />} />
     </Routes>
   );
 }

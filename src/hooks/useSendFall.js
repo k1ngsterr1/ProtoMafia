@@ -1,12 +1,22 @@
 import axios from "axios";
 
 export const useSendFall = () => {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const refreshToken = userData.refresh;
+
   const sendFall = async (roomId, playerId) => {
     try {
       console.log(roomId, playerId);
 
       const response = await axios.post(
-        `https://showtime.up.railway.app/api/game/warn/${roomId}/user/${playerId}`
+        `http://localhost:4200/api/game/warn/1/user/${playerId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
       );
 
       console.log("successfully give fall!", response.data);
