@@ -58,6 +58,7 @@ import { useCheckRole } from "../../hooks/useCheckRole";
 import { useStartNight } from "../../hooks/useStartNight";
 import { useStartDay } from "../../hooks/useStartDay";
 import { useWakeUpMafia } from "../../hooks/useWakeUpMafia";
+import { useWakeUpSheriff } from "../../hooks/useWakeUpSheriff";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -528,6 +529,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const sendFall = useSendFall();
   const startNight = useStartNight();
   const wakeUpMafia = useWakeUpMafia();
+  const wakeUpSheriff = useWakeUpSheriff();
   const startDay = useStartDay();
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
@@ -572,6 +574,12 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     }
   });
 
+  socket.on("wakeUpSheriff", (data) => {
+    if (role === "Sheriff") {
+      setIsDisabled(false);
+    }
+  });
+
   socket.on("connect_error", (error) => {
     console.log("Connection failed:", error);
   });
@@ -582,6 +590,10 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   socket.on("wakeUpMafia", (data) => {
     console.log("Mafia wake up!");
+  });
+
+  socket.on("wakeUpSheriff", () => {
+    console.log("Sheriff wake up!");
   });
 
   socket.on("disableUI", (data) => {
@@ -667,7 +679,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     } catch (error) {
       console.error("Error checking user role:", error);
     } finally {
-      setIsLoading(false);
     }
   };
 
@@ -930,7 +941,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const SheriffButton = () => {
     const handleClick = () => {
-      checkRoleSheriffAndDisableUI();
+      wakeUpSheriff();
+      // checkRoleSheriffAndDisableUI();
     };
 
     return (
@@ -1158,7 +1170,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const MafiaButton = () => {
     const handleClick = () => {
       wakeUpMafia();
-      console.log("Кнопка вроде как работает");
     };
 
     return (
@@ -1279,8 +1290,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     { icon: BottomBarButtonTypes.PARTICIPANTS },
     { icon: BottomBarButtonTypes.MEETING_ID_COPY },
   ];
-
-  console.log("isDisabled is here:", isDisabled);
 
   return isMobile || isTab ? (
     <div

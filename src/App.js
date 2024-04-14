@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import OnlineApp from "./AppVideo";
+import { HomeScreen } from "./pages/HomeScreen";
 
 function App() {
   const action = useNavigationType();
@@ -70,6 +71,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/login" element={<HomeScreen />} />
       <Route path="/" element={<OnlineApp />} />
     </Routes>
   );
