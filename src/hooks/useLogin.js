@@ -3,10 +3,8 @@ import axios from "axios";
 export const useLogin = () => {
   const login = async (loginData) => {
     try {
-      console.log("login data is here:", loginData);
-
       const response = await axios.post(
-        "http://localhost:4200/api/auth/login",
+        "https://showtimeserver-production.up.railway.app/api/auth/login",
         loginData
       );
 
@@ -26,7 +24,7 @@ export const useLogin = () => {
       localStorage.setItem("userData", JSON.stringify(userData));
       localStorage.setItem("roomId", JSON.stringify(loginData.roomId));
 
-      window.location.href = "/";
+      window.location.href = "/video";
     } catch (error) {
       console.error("There was an error with starting the game:", error);
     }

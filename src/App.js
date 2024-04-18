@@ -71,8 +71,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={<HomeScreen />} />
-      <Route path="/" element={<OnlineApp />} />
+      <Route path="/" element={<HomeScreen />} />
+      <Route path="/video" element={<OnlineApp />} />
     </Routes>
   );
 }
