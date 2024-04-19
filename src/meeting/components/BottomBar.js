@@ -51,6 +51,7 @@ import { socket } from "../../hooks/socketService";
 import { useKillPlayer } from "../../hooks/useKillPlayer";
 import { useGetPlayers } from "../../hooks/useGetPlayers";
 import { useKickPlayer } from "../../hooks/useKickPlayer";
+import { useStartGame } from "../../hooks/useStartGame";
 
 import { useDetectMafia } from "../../hooks/useDetectMafia";
 import Cookies from "js-cookie";
@@ -535,6 +536,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const wakeUpMafia = useWakeUpMafia();
   const wakeUpSheriff = useWakeUpSheriff();
   const startDay = useStartDay();
+  const startGame = useStartGame();
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
   const { players } = useGetPlayers(2);
@@ -544,6 +546,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [showPopup, setShowPopup] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isUIDisabled, setUIDisabled] = useState(false);
 
   roomId = roomId.replace(/"/g, '');
   roomId = parseInt(roomId, 10);
@@ -583,6 +586,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       window.location.href = "https://mafshow.kz";
     });
   }, []);
+
   useEffect(() => {
     socket.on("InnocentWon", (data) => {
       alert(data.message);
@@ -590,6 +594,12 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       window.location.href = "https://mafshow.kz";
     });
   }, []);
+
+  // useEffect(() => {
+  //   socket.on("gameRunning", (data) => {
+  //     alert(data.message);
+  //   });
+  // }, []);
 
   socket.on("nightStarted", () => {
     console.log("Night has begun. Everyone should wait.");
@@ -656,8 +666,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       socket.off("userWarned");
     };
   }, []);
-
-  const [isUIDisabled, setUIDisabled] = useState(false);
 
   useEffect(() => {
     const handleNightStarted = () => {
@@ -1098,10 +1106,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const KickSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClick = (roomId, playerId) => {
-      kickPlayer(roomId, playerId);
-    };
-
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
@@ -1259,19 +1263,22 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     });
   };
 
-  const StartButton = () => {
-    const handleClick = () => {
-      a;
-    };
+  // const StartButton = () => {
+  //   const handleClick = () => {
+  //     startGame(roomId);
+  //   };
 
-    return (
-      <Tooltip text={"Начать игру"}>
-        <button className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 text-white border-[#ffffff33] focus:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2">
-          Старт
-        </button>
-      </Tooltip>
-    );
-  };
+  //   return (
+  //     <Tooltip text={"Начать игру"}>
+  //       <button 
+  //         className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 text-white border-[#ffffff33] focus:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
+  //         onClick={handleClick}
+  //       >
+  //         Старт
+  //       </button>
+  //     </Tooltip>
+  //   );
+  // };
 
   const tollTipEl = useRef();
   const isMobile = useIsMobile();
@@ -1341,7 +1348,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           <MafiaButton />
           <DonButton />
           <SheriffButton />
-          <StartButton />
+          {/* <StartButton /> */}
           <PlayerSelector />
           <KickSelector />
         </>
@@ -1481,7 +1488,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             <MafiaButton />
             <DonButton />
             <SheriffButton />
-            <StartButton />
+            {/* <StartButton /> */}
             <PlayerSelector />
             <KickSelector />
           </>
