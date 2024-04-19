@@ -6,7 +6,7 @@ export const useStartNight = () => {
 
     try {
       const response = await axios.post(
-        `https://showtimeserver-production.up.railway.app/api/game/1/startNight`
+        `http://localhost:4200/api/game/1/startNight`
       );
 
       console.log("Data from the night:", response.data);
