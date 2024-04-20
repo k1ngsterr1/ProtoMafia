@@ -52,7 +52,7 @@ import { useKillPlayer } from "../../hooks/useKillPlayer";
 import { useGetPlayers } from "../../hooks/useGetPlayers";
 import { useKickPlayer } from "../../hooks/useKickPlayer";
 import { useStartGame } from "../../hooks/useStartGame";
-
+import { useVotePlayer } from "../../hooks/useVotePlayer";
 import { useDetectMafia } from "../../hooks/useDetectMafia";
 import Cookies from "js-cookie";
 import { useGetRole } from "../../hooks/useGetRole";
@@ -60,9 +60,11 @@ import { useSendFall } from "../../hooks/useSendFall";
 import { useCheckRole } from "../../hooks/useCheckRole";
 import { useStartNight } from "../../hooks/useStartNight";
 import { useStartDay } from "../../hooks/useStartDay";
+import { useWakeUpDon } from "../../hooks/useWakeUpDon";
 import { useWakeUpMafia } from "../../hooks/useWakeUpMafia";
 import { useWakeUpSheriff } from "../../hooks/useWakeUpSheriff";
-
+import { useDetectSheriff } from "../../hooks/useDetectSheriff";
+import { useEndVote } from "../../hooks/useEndVote";
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
 
@@ -530,11 +532,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const userDataString = userData ? JSON.parse(userData) : null;
   const kickPlayer = useKickPlayer();
   const detectMafia = useDetectMafia();
+  const detectSheriff = useDetectSheriff();
   const sendFall = useSendFall();
   const killPlayer = useKillPlayer();
   const startNight = useStartNight();
   const wakeUpMafia = useWakeUpMafia();
   const wakeUpSheriff = useWakeUpSheriff();
+  const wakeUpDon = useWakeUpDon();
   const startDay = useStartDay();
   const startGame = useStartGame();
   const checkRole = useCheckRole();
@@ -547,6 +551,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isUIDisabled, setUIDisabled] = useState(false);
+  const votePlayer = useVotePlayer();
+  const endVote = useEndVote();
 
   roomId = roomId.replace(/"/g, '');
   roomId = parseInt(roomId, 10);
@@ -612,7 +618,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   });
 
   socket.on("wakeUpMafia", (data) => {
-    if (role === "Mafia" || role === "Don") {
+    if (role === "Mafia") {
+      setIsDisabled(false);
+    }
+  });
+
+  socket.on("wakeUpDon", (data) => {
+    if (role === "Don") {
       setIsDisabled(false);
     }
   });
@@ -622,6 +634,10 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       setIsDisabled(false);
     }
   });
+  socket.on("wakeUpDon", (data) => {
+    console.log("Don wake up!");
+  });
+
 
   socket.on("connect_error", (error) => {
     console.log("Connection failed:", error);
@@ -708,9 +724,9 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     setIsBlackRectangleVisible(true);
   };
 
-  const checkRoleSheriffAndDisableUI = async () => {
+  const checkRoleSheriffAndDisableUI = () => {
     try {
-      const response = await checkRole();
+      const response = checkRole();
 
       if (response && response.role === "Don") {
         setIsUIEnabled(false);
@@ -965,11 +981,30 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const DonButton = () => {
     const handleClick = () => {
-      checkRoleDonAndDisableUI();
+      // checkRoleDonAndDisableUI();
+      wakeUpDon(roomId);
     };
 
     return (
-      <Tooltip text={"Разубдить Дона"}>
+      <Tooltip text={"Разбудить Дона"}>
+        <button
+          className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faGun} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
+  const EndVote = () => {
+    const handleClick = () => {
+      // checkRoleDonAndDisableUI();
+      endVote(roomId);
+    };
+
+    return (
+      <Tooltip text={"Закончить голосование"}>
         <button
           className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
           onClick={handleClick}
@@ -997,6 +1032,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Tooltip>
     );
   };
+
 
   const KillPlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -1031,6 +1067,39 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
+  const DetectSheriffButton = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {players.map((player) => (
+                <li
+                  key={player.id}
+                  onClick={() => detectSheriff(roomId, player.id)}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>Найти Шерифа</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
+        </button>
+      </div>
+    );
+  };
+
   const VotePlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -1043,6 +1112,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
                 <li
                   key={player.id}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  onClick={() => votePlayer(roomId, player.id)}
                 >
                   {player.username}
                 </li>
@@ -1351,23 +1421,32 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           {/* <StartButton /> */}
           <PlayerSelector />
           <KickSelector />
+          <EndVote />
         </>
       )}
       {role === "Sheriff" && (
         <>
           <MafiaSelectorForSheriff />
+          <VotePlayerSelector />
         </>
       )}
       {role === "Mafia" && (
         <>
           <KillPlayerSelector />
+          <VotePlayerSelector />
           {/* <VotePlayerSelector /> */}
         </>
       )}
       {role === "Innocent" && (
         <>
-          <PlayerSelector />
+          <VotePlayerSelector />
         </>
+      )}
+      {role === "Don" && (
+          <>
+            <DetectSheriffButton />
+            <VotePlayerSelector />
+          </>
       )}
       <WebCamBTN />
       <RecordingBTN />
@@ -1469,15 +1548,23 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         {role === "Sheriff" && (
           <>
             <MafiaSelectorForSheriff />
+            <VotePlayerSelector />
           </>
         )}
         {role === "Mafia" && (
           <>
             <KillPlayerSelector />
+            <VotePlayerSelector />
           </>
         )}
         {role === "Innocent" && (
           <>
+            <VotePlayerSelector />
+          </>
+        )}
+        {role === "Don" && (
+          <>
+            <DetectSheriffButton />
             <VotePlayerSelector />
           </>
         )}
@@ -1491,6 +1578,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             {/* <StartButton /> */}
             <PlayerSelector />
             <KickSelector />
+            <EndVote />
           </>
         )}
         {showPopup && <Popup whichTime={time} mafia={mafia} />}
