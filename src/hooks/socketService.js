@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 const userData = localStorage.getItem("userData");
 const userDataParse = JSON.parse(userData);
 
-export const socket = io("http://localhost:4200", {
+export const socket = io("https://showtimeserver-production.up.railway.app", {
   path: "/sockets/",
   query: {
     userId: userDataParse?.id,

@@ -6,7 +6,7 @@ export const useVotePlayer = () => {
       console.log(roomId, playerId);
 
       const response = await axios.post(
-        `http://localhost:4200/api/game/vote/${roomId}/user/${playerId}`
+        `https://showtimeserver-production.up.railway.app/api/game/vote/${roomId}/user/${playerId}`
       );
 
       console.log("voted succesfully!", response.data);

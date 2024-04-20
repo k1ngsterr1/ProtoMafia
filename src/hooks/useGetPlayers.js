@@ -10,7 +10,7 @@ export function useGetPlayers(roomId) {
     const fetchPlayers = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4200/api/rooms/${roomId}/users`
+          `https://showtimeserver-production.up.railway.app/api/rooms/${roomId}/users`
         );
         console.log("zhopa:", response.data);
         setPlayers(response.data.users);
