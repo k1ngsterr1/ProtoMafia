@@ -4,7 +4,7 @@ export const useStartGame = () => {
   const startGame = async ({ roomId }) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/start-game/1`
+        `http://localhost:4200/api/game/start-game/${roomId}`,
       );
 
       console.log("Data from starting the game:", response.data);
