@@ -11,5 +11,5 @@ export const useWinMafia = () => {
     }
   };
 
-  return killPlayer;
+  return winMafia;
 };
