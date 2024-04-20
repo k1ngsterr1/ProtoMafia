@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export const useStartDay = () => {
-  const startDay = async () => {
+  const startDay = async (roomId) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/1/startDay`
+        `http://localhost:4200/api/game/${roomId}/startDay`
       );
 
       console.log("Data from the night:", response.data);

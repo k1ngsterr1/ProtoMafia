@@ -1,12 +1,12 @@
 import axios from "axios";
 
 export const useStartNight = () => {
-  const startNight = async () => {
+  const startNight = async (roomId) => {
     // console.log("room id is here:", roomId);
 
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/1/startNight`
+        `http://localhost:4200/api/game/${roomId}/startNight`
       );
 
       console.log("Data from the night:", response.data);

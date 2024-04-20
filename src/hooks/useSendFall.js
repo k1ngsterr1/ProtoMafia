@@ -9,7 +9,7 @@ export const useSendFall = () => {
       console.log(roomId, playerId);
 
       const response = await axios.post(
-        `http://localhost:4200/api/game/warn/1/user/${playerId}`,
+        `http://localhost:4200/api/game/warn/${roomId}/user/${playerId}`,
         {},
         {
           headers: {

@@ -9,7 +9,7 @@ export function useGetRole() {
 
     try {
       const response = await axios.get(
-        `http://localhost:4200/api/game/get-role/1/${userId}`
+        `http://localhost:4200/api/game/get-role/${roomId}/${userId}`
       );
 
       setRole(response.data.user.gameRole);

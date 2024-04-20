@@ -528,6 +528,9 @@ const Tooltip = ({ children, text }) => {
 
 export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   let roomId = localStorage.getItem("roomId");
+  roomId = roomId.replace(/"/g, '');
+  roomId = parseInt(roomId, 10);
+
   const userData = localStorage.getItem("userData");
   const userDataString = userData ? JSON.parse(userData) : null;
   const kickPlayer = useKickPlayer();
@@ -543,19 +546,20 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const startGame = useStartGame();
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
-  const { players } = useGetPlayers(2);
+  const { players } = useGetPlayers(roomId);
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
   const [time, setTime] = useState();
   const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isDead, setIsDead] = useState(false);
   const [isUIDisabled, setUIDisabled] = useState(false);
   const votePlayer = useVotePlayer();
   const endVote = useEndVote();
-
-  roomId = roomId.replace(/"/g, '');
-  roomId = parseInt(roomId, 10);
+  const redirectToHome = () => {
+    window.location.href = "https://mafshow.kz";
+  };
   const communicateWithDon = () => {
     if (userDataObject && userDataObject.role !== "Don") {
       setIsDisabled(true);
@@ -575,8 +579,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   }, []);
   useEffect(() => {
     socket.on("killed", (data) => {
-      alert(data.message);
-      setIsDisabled(true);
+      setIsDead(true);
       window.location.href = "https://mafshow.kz";
     });
 
@@ -712,6 +715,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   socket.on("dayStarted", () => {
     console.log("Day has been started from the socket!");
   });
+
 
   const checkRoleDonAndDisableUI = () => {
     if (userDataString) {
@@ -1036,34 +1040,49 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const KillPlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handlePlayerSelection = (roomId, playerId) => {
+      if (!isClicked) {
+        killPlayer(roomId, playerId);
+        setIsClicked(true);
+        setIsOpen(false);
+      }
+    };
+
+    const eligiblePlayers = players.filter(player => 
+        player.gameRole !== 'Showman' && player.gameRole !== 'Mafia' && player.gameRole !== 'Don'
+    );
+
     return (
-      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
-        {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
-            <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  onClick={() => killPlayer(roomId, player.id)}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                >
-                  {player.username}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <button
-          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span>Убить игрока</span>
-          <FontAwesomeIcon
-            icon={isOpen ? faChevronDown : faChevronUp}
-            className="text-xs"
-          />
-        </button>
-      </div>
+        <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+            {isOpen && (
+                <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
+                    <ul className="text-white">
+                        {eligiblePlayers.map((player) => (
+                            <li
+                                key={player.id}
+                                onClick={() => handlePlayerSelection(roomId, player.id)}
+                                className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                            >
+                                {player.username}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            <button
+                className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+                onClick={() => setIsOpen(!isOpen)}
+                disabled={false} // Always allow toggling the dropdown
+            >
+                <span>Убить игрока</span>
+                <FontAwesomeIcon
+                    icon={isOpen ? faChevronDown : faChevronUp}
+                    className="text-xs"
+                />
+            </button>
+        </div>
     );
   };
 
@@ -1173,45 +1192,60 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
-  const KickSelector = () => {
+  const KickSelector = ({ players, kickPlayer, roomId }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const toggleDropdown = () => {
+        if (!isClicked) {
+            setIsOpen(!isOpen);
+        }
+    };
+
+    const handleKickPlayer = (roomId, playerId) => {
+        kickPlayer(roomId, playerId);
+        setIsClicked(true);
+        setIsOpen(false);
+    };
 
     return (
-      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
-        {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
-            <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  onClick={() => kickPlayer(roomId, player.id)}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                >
-                  {player.username}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <button
-          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span>Кикнуть</span>
-          <FontAwesomeIcon
-            icon={isOpen ? faChevronDown : faChevronUp}
-            className="text-xs"
-          />
-        </button>
-      </div>
+        <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+            {isOpen && (
+                <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
+                    <ul className="text-white">
+                        {players.map((player) => (
+                            <li
+                                key={player.id}
+                                onClick={() => handleKickPlayer(roomId, player.id)}
+                                className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                            >
+                                {player.username}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            <button
+                className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+                onClick={toggleDropdown}
+                disabled={isClicked} // Button is disabled after a list item is clicked
+            >
+                <span>Кикнуть</span>
+                <FontAwesomeIcon
+                    icon={isOpen ? faChevronDown : faChevronUp}
+                    className="text-xs"
+                />
+            </button>
+        </div>
     );
-  };
+};
+
 
   const NightButton = () => {
     const handleClick = () => {
       setTime("Night");
       setShowPopup(true);
-      startNight();
+      startNight(roomId);
       setTimeout(() => setShowPopup(false), 2500);
     };
 
@@ -1230,7 +1264,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const DayButton = () => {
     const handleClick = () => {
       setTime("Day");
-      startDay();
+      startDay(roomId);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 2500);
     };
@@ -1276,7 +1310,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const MafiaButton = () => {
     const handleClick = () => {
-      wakeUpMafia();
+      wakeUpMafia(roomId);
     };
 
     return (
@@ -1405,12 +1439,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       <LeaveBTN />
       <MicBTN />
       {isDisabled && userDataString.role !== "showman" && (
-        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center">
+        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center !z-[100000000000000000000000000000000000000]">
           <span className="text-primary-red font-killbill text-5xl">
             Сейчас ночь...
           </span>
         </div>
       )}
+
       {userDataString.role == "showman" && (
         <>
           <DayButton />
@@ -1537,7 +1572,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         </>
       )}
       {isDisabled && userDataString.role !== "showman" && (
-        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center">
+        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center !z-[100000000000000000000000000000000000000]">
           <span className="text-primary-red font-killbill text-5xl">
             Сейчас ночь...
           </span>
