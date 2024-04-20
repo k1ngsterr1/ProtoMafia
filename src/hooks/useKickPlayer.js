@@ -6,7 +6,7 @@ export const useKickPlayer = () => {
   const kickPlayer = async (roomId, userId) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/disconnect/1/${userId}`
+        `https://showtimeserver-production.up.railway.app/api/game/disconnect/1/${userId}`
       );
 
       socket.emit("kickPlayer", { roomId, userId });
