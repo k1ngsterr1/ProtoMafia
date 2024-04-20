@@ -11,5 +11,5 @@ export const useWinInnocent = () => {
     }
   };
 
-  return killPlayer;
+  return winInnocent;
 };

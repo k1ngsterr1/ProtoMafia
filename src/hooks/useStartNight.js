@@ -2,11 +2,11 @@ import axios from "axios";
 
 export const useStartNight = () => {
   const startNight = async () => {
-    // console.log("room id is here:", roomId);
+    const roomId = JSON.parse(localStorage.getItem("roomId"));
 
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/1/startNight`
+        `https://showtimeserver-production.up.railway.app/api/game/${roomId}/startNight`
       );
 
       console.log("Data from the night:", response.data);

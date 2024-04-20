@@ -1,10 +1,12 @@
 import axios from "axios";
 
 export const useStartDay = () => {
+  const roomId = JSON.parse(localStorage.getItem("roomId"));
+
   const startDay = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/1/startDay`
+        `https://showtimeserver-production.up.railway.app/api/game/${roomId}/startDay`
       );
 
       console.log("Data from the night:", response.data);
