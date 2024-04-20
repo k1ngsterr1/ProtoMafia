@@ -1088,68 +1088,93 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const DetectSheriffButton = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const eligiblePlayers = players.filter(player => 
+        player.gameRole !== 'Showman' && player.gameRole !== 'Mafia' && player.gameRole !== 'Don'
+    );
+
+    const handleSheriffDetection = (roomId, playerId) => {
+        if (!isClicked) {
+            detectSheriff(roomId, playerId);
+            setIsClicked(true);
+            setIsOpen(false);
+        }
+    };
+
     return (
-      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
-        {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
-            <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  onClick={() => detectSheriff(roomId, player.id)}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                >
-                  {player.username}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <button
-          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span>Найти Шерифа</span>
-          <FontAwesomeIcon
-            icon={isOpen ? faChevronDown : faChevronUp}
-            className="text-xs"
-          />
-        </button>
-      </div>
+        <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+            {isOpen && (
+                <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
+                    <ul className="text-white">
+                        {eligiblePlayers.map((player) => (
+                            <li
+                                key={player.id}
+                                onClick={() => handleSheriffDetection(roomId, player.id)}
+                                className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                            >
+                                {player.username}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            <button
+                className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+                onClick={() => setIsOpen(!isOpen)}
+                disabled={isClicked}
+            >
+                <span>Найти Шерифа</span>
+                <FontAwesomeIcon
+                    icon={isOpen ? faChevronDown : faChevronUp}
+                    className="text-xs"
+                />
+            </button>
+        </div>
     );
   };
 
   const VotePlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleVote = (roomId, playerId) => {
+        if (!isClicked) {
+            votePlayer(roomId, playerId);
+            setIsClicked(true); 
+            setIsOpen(false);
+        }
+    };
 
     return (
-      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
-        {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
-            <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                  onClick={() => votePlayer(roomId, player.id)}
-                >
-                  {player.username}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <button
-          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span>Проголосовать</span>
-          <FontAwesomeIcon
-            icon={isOpen ? faChevronDown : faChevronUp}
-            className="text-xs"
-          />
-        </button>
-      </div>
+        <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+            {isOpen && (
+                <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
+                    <ul className="text-white">
+                        {players.map((player) => (
+                            <li
+                                key={player.id}
+                                className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                onClick={() => handleVote(roomId, player.id)}
+                            >
+                                {player.username}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            <button
+                className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+                onClick={() => setIsOpen(!isOpen)}
+                disabled={isClicked}
+            >
+                <span>Проголосовать</span>
+                <FontAwesomeIcon
+                    icon={isOpen ? faChevronDown : faChevronUp}
+                    className="text-xs"
+                />
+            </button>
+        </div>
     );
   };
 
@@ -1192,53 +1217,44 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
-  const KickSelector = ({ players, kickPlayer, roomId }) => {
+  const KickSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);
-
-    const toggleDropdown = () => {
-        if (!isClicked) {
-            setIsOpen(!isOpen);
-        }
-    };
 
     const handleKickPlayer = (roomId, playerId) => {
         kickPlayer(roomId, playerId);
-        setIsClicked(true);
         setIsOpen(false);
     };
 
     return (
-        <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
-            {isOpen && (
-                <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
-                    <ul className="text-white">
-                        {players.map((player) => (
-                            <li
-                                key={player.id}
-                                onClick={() => handleKickPlayer(roomId, player.id)}
-                                className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                            >
-                                {player.username}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            <button
-                className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-                onClick={toggleDropdown}
-                disabled={isClicked} // Button is disabled after a list item is clicked
-            >
-                <span>Кикнуть</span>
-                <FontAwesomeIcon
-                    icon={isOpen ? faChevronDown : faChevronUp}
-                    className="text-xs"
-                />
-            </button>
-        </div>
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+          {isOpen && (
+              <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
+                  <ul className="text-white">
+                      {players.map((player) => (
+                          <li
+                              key={player.id}
+                              onClick={() => handleKickPlayer(roomId, player.id)}
+                              className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                          >
+                              {player.username}
+                          </li>
+                      ))}
+                  </ul>
+              </div>
+          )}
+          <button
+              className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+              onClick={() => setIsOpen(!isOpen)}
+          >
+              <span>Кикнуть</span>
+              <FontAwesomeIcon
+                  icon={isOpen ? faChevronDown : faChevronUp}
+                  className="text-xs"
+              />
+          </button>
+      </div>
     );
-};
+  };
 
 
   const NightButton = () => {
@@ -1327,35 +1343,46 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const MafiaSelectorForSheriff = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);  // Tracks whether a selection has been made
+
+    // Function to handle the detection of a mafia member
+    const handleDetectMafia = (roomId, playerId) => {
+        if (!isClicked) {  // Ensure the detection can only happen once
+            detectMafia(roomId, playerId);
+            setIsClicked(true);  // Prevent further selections
+            setIsOpen(false);    // Close the dropdown after selection
+        }
+    };
 
     return (
-      <div className="relative inline-block bg-gray-750  rounded-lg border-2 border-[#ffffff33]">
-        {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
-            <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  onClick={() => detectMafia(roomId, player.id)}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                >
-                  {player.username}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <button
-          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span>Выберите мафиози</span>
-          <FontAwesomeIcon
-            icon={isOpen ? faChevronDown : faChevronUp}
-            className="text-xs"
-          />
-        </button>
-      </div>
+        <div className="relative inline-block bg-gray-750 rounded-lg border-2 border-[#ffffff33]">
+            {isOpen && (
+                <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
+                    <ul className="text-white">
+                        {players.map((player) => (
+                            <li
+                                key={player.id}
+                                onClick={() => handleDetectMafia(roomId, player.id)}
+                                className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                            >
+                                {player.username}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            <button
+                className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+                onClick={() => !isClicked && setIsOpen(!isOpen)}  // Only toggle if no selection has been made
+                disabled={isClicked} // Disable the button after a selection has been made
+            >
+                <span>Выберите мафиози</span>
+                <FontAwesomeIcon
+                    icon={isOpen ? faChevronDown : faChevronUp}
+                    className="text-xs"
+                />
+            </button>
+        </div>
     );
   };
 
