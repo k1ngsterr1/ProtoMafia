@@ -1,5 +1,6 @@
 const API_BASE_URL = "https://api.videosdk.live";
-const VIDEOSDK_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI0MjQ1M2ZmMy0xNDEzLTRiNzgtOWI4Yy0wYjQ5NTgxMzAzZjEiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxMzQ2ODM2OCwiZXhwIjoxNzE0MDczMTY4fQ.Xtagsqiz9JzeEH8hwNnzO9iRVW0ScCrxXUHoRjXxkUc";
+const VIDEOSDK_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI0MjQ1M2ZmMy0xNDEzLTRiNzgtOWI4Yy0wYjQ5NTgxMzAzZjEiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxMzYzNTgyMiwiZXhwIjoxNzE2MjI3ODIyfQ.d_2qhmturg9khQFO3zT2tXdllPAxHtQhjpdVPzhdtz8";
 const API_AUTH_URL = process.env.REACT_APP_AUTH_URL;
 
 export const getToken = async () => {
@@ -27,15 +28,14 @@ export const createMeeting = async ({ token }) => {
     headers: { Authorization: token, "Content-Type": "application/json" },
   };
 
-  const response = await fetch(url, options)
-  const data = await response.json()
+  const response = await fetch(url, options);
+  const data = await response.json();
 
   if (data.roomId) {
-    return { meetingId: data.roomId, err: null }
+    return { meetingId: data.roomId, err: null };
   } else {
-    return { meetingId: null, err: data.error }
+    return { meetingId: null, err: data.error };
   }
-
 };
 
 export const validateMeeting = async ({ roomId, token }) => {
@@ -46,19 +46,18 @@ export const validateMeeting = async ({ roomId, token }) => {
     headers: { Authorization: token, "Content-Type": "application/json" },
   };
 
-  const response = await fetch(url, options)
+  const response = await fetch(url, options);
 
   if (response.status === 400) {
-    const data = await response.text()
-    return { meetingId: null, err: data }
+    const data = await response.text();
+    return { meetingId: null, err: data };
   }
 
-  const data = await response.json()
+  const data = await response.json();
 
   if (data.roomId) {
-    return { meetingId: data.roomId, err: null }
+    return { meetingId: data.roomId, err: null };
   } else {
-    return { meetingId: null, err: data.error }
+    return { meetingId: null, err: data.error };
   }
-
 };

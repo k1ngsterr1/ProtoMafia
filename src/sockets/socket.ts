@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-export const socket = io("http://localhost:4200", {
+export const socket = io("https://showtimeserver-production.up.railway.app", {
   path: "/sockets/",
   transports: ["polling", "websocket"],
   reconnectionAttempts: 500,

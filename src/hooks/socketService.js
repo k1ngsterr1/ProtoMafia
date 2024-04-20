@@ -6,7 +6,7 @@ export const socket = io("https://showtimeserver-production.up.railway.app", {
   path: "/sockets/",
   query: {
     userId: userDataParse?.id,
-    videoRoomId: 1,
+    videoRoomId: userDataParse?.roomId,
   },
   transports: ["polling", "websocket"],
   reconnectionAttempts: 50000,
