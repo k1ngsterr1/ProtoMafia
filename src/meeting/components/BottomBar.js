@@ -48,9 +48,11 @@ import {
 
 import { socket } from "../../hooks/socketService";
 
+import { useKillPlayer } from "../../hooks/useKillPlayer";
 import { useGetPlayers } from "../../hooks/useGetPlayers";
 import { useKickPlayer } from "../../hooks/useKickPlayer";
 
+import { useDetectMafia } from "../../hooks/useDetectMafia";
 import Cookies from "js-cookie";
 import { useGetRole } from "../../hooks/useGetRole";
 import { useSendFall } from "../../hooks/useSendFall";
@@ -522,11 +524,13 @@ const Tooltip = ({ children, text }) => {
 };
 
 export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
-  const roomId = localStorage.getItem("roomId");
+  let roomId = localStorage.getItem("roomId");
   const userData = localStorage.getItem("userData");
   const userDataString = userData ? JSON.parse(userData) : null;
   const kickPlayer = useKickPlayer();
+  const detectMafia = useDetectMafia();
   const sendFall = useSendFall();
+  const killPlayer = useKillPlayer();
   const startNight = useStartNight();
   const wakeUpMafia = useWakeUpMafia();
   const wakeUpSheriff = useWakeUpSheriff();
@@ -541,6 +545,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
+  roomId = roomId.replace(/"/g, '');
+  roomId = parseInt(roomId, 10);
   const communicateWithDon = () => {
     if (userDataObject && userDataObject.role !== "Don") {
       setIsDisabled(true);
@@ -550,12 +556,39 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   useEffect(() => {
     socket.on("kicked", (data) => {
       alert(data.message);
-      window.location.href = "https://samigroup.kz";
+      setIsDisabled(true);
+      window.location.href = "https://mafshow.kz";
     });
 
     return () => {
       socket.off("kicked");
     };
+  }, []);
+  useEffect(() => {
+    socket.on("killed", (data) => {
+      alert(data.message);
+      setIsDisabled(true);
+      window.location.href = "https://mafshow.kz";
+    });
+
+    return () => {
+      socket.off("killed");
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("MafiaWon", (data) => {
+      alert(data.message);
+      setUIDisabled(true);
+      window.location.href = "https://mafshow.kz";
+    });
+  }, []);
+  useEffect(() => {
+    socket.on("InnocentWon", (data) => {
+      alert(data.message);
+      setUIDisabled(true);
+      window.location.href = "https://mafshow.kz";
+    });
   }, []);
 
   socket.on("nightStarted", () => {
@@ -569,7 +602,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   });
 
   socket.on("wakeUpMafia", (data) => {
-    if (role === "Mafia") {
+    if (role === "Mafia" || role === "Don") {
       setIsDisabled(false);
     }
   });
@@ -959,7 +992,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const KillPlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
-
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
@@ -968,6 +1000,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
               {players.map((player) => (
                 <li
                   key={player.id}
+                  onClick={() => killPlayer(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -1187,10 +1220,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const MafiaSelectorForSheriff = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClick = (playerId) => {
-      kickPlayer(playerId);
-    };
-
     return (
       <div className="relative inline-block bg-gray-750  rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
@@ -1199,7 +1228,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
               {players.map((player) => (
                 <li
                   key={player.id}
-                  onClick={() => kickPlayer(player.id)}
+                  onClick={() => detectMafia(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -1324,7 +1353,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       )}
       {role === "Mafia" && (
         <>
-          <VotePlayerSelector />
+          <KillPlayerSelector />
+          {/* <VotePlayerSelector /> */}
         </>
       )}
       {role === "Innocent" && (
