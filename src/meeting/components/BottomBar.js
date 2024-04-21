@@ -528,6 +528,7 @@ const Tooltip = ({ children, text }) => {
 
 export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   let roomId = localStorage.getItem("roomId");
+  let roomIdString = roomId ? JSON.parse(roomId) : null;
   const userData = localStorage.getItem("userData");
   const userDataString = userData ? JSON.parse(userData) : null;
   const kickPlayer = useKickPlayer();
@@ -543,7 +544,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const startGame = useStartGame();
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
-  const { players } = useGetPlayers(2);
+  const { players } = useGetPlayers(roomIdString);
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
   const [time, setTime] = useState();
   const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
@@ -554,7 +555,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const votePlayer = useVotePlayer();
   const endVote = useEndVote();
 
-  roomId = roomId.replace(/"/g, '');
+  roomId = roomId.replace(/"/g, "");
   roomId = parseInt(roomId, 10);
   const communicateWithDon = () => {
     if (userDataObject && userDataObject.role !== "Don") {
@@ -637,7 +638,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   socket.on("wakeUpDon", (data) => {
     console.log("Don wake up!");
   });
-
 
   socket.on("connect_error", (error) => {
     console.log("Connection failed:", error);
@@ -1033,7 +1033,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
-
   const KillPlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -1340,7 +1339,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   //   return (
   //     <Tooltip text={"Начать игру"}>
-  //       <button 
+  //       <button
   //         className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 text-white border-[#ffffff33] focus:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
   //         onClick={handleClick}
   //       >
@@ -1443,10 +1442,10 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         </>
       )}
       {role === "Don" && (
-          <>
-            <DetectSheriffButton />
-            <VotePlayerSelector />
-          </>
+        <>
+          <DetectSheriffButton />
+          <VotePlayerSelector />
+        </>
       )}
       <WebCamBTN />
       <RecordingBTN />
