@@ -553,6 +553,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [sheriffFailed, setSheriffFailed] = useState(false);
+  const [sheriffSucceed, setSheriffSucceed] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isDead, setIsDead] = useState(false);
@@ -642,7 +643,24 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     }
   });
 
-  socket.on("sheriffDetected", (data) => {});
+  useEffect(() => {
+    const handleSheriffDetected = (data) => {
+      setSheriffSucceed(true);
+
+      const timer = setTimeout(() => {
+        setSheriffSucceed(false);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    };
+
+    socket.on("sheriffDetected", handleSheriffDetected);
+
+    return () => {
+      socket.off("sheriffDetected", handleSheriffDetected);
+      clearTimeout(timer);
+    };
+  }, []);
 
   useEffect(() => {
     const handleSheriffNotDetected = (data) => {
@@ -1661,15 +1679,16 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             <VotePlayerSelector />
           </>
         )}
-        {sheriffFailed && (
-          <>
-            <div className="absolute top-8 mb-4 left-[50%] translate-[-50%, 0] w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
-              Нет, это не Шериф!
-            </div>
-          </>
-        )}
+
         {role === "Don" && (
           <>
+            {sheriffSucceed && (
+              <>
+                <div className="absolute top-8 mb-4 left-[50%] translate-[-50%, 0] w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+                  Да, это Шериф!
+                </div>
+              </>
+            )}
             {sheriffFailed && (
               <>
                 <div className="absolute top-8 mb-4 left-[50%] translate-[-50%, 0] w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
