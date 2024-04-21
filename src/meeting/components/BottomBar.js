@@ -38,12 +38,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
   faChevronUp,
+  faCross,
   faGun,
   faHatCowboy,
   faMoon,
   faPerson,
   faShield,
   faSun,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { socket } from "../../hooks/socketService";
@@ -65,6 +67,7 @@ import { useWakeUpMafia } from "../../hooks/useWakeUpMafia";
 import { useWakeUpSheriff } from "../../hooks/useWakeUpSheriff";
 import { useDetectSheriff } from "../../hooks/useDetectSheriff";
 import { useEndVote } from "../../hooks/useEndVote";
+import { useStartVote } from "../../hooks/useStartVote";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -545,6 +548,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const wakeUpDon = useWakeUpDon();
   const startDay = useStartDay();
   const startGame = useStartGame();
+  const startVote = useStartVote();
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
   const { players } = useGetPlayers(roomIdString);
@@ -556,6 +560,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [sheriffSucceed, setSheriffSucceed] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [voteButton, setVoteButton] = useState(false);
   const [isDead, setIsDead] = useState(false);
   const [isUIDisabled, setUIDisabled] = useState(false);
   const votePlayer = useVotePlayer();
@@ -644,10 +649,12 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   });
 
   useEffect(() => {
+    let timer;
+
     const handleSheriffDetected = (data) => {
       setSheriffSucceed(true);
 
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setSheriffSucceed(false);
       }, 2500);
 
@@ -663,10 +670,12 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   }, []);
 
   useEffect(() => {
+    let timer;
+
     const handleSheriffNotDetected = (data) => {
       setSheriffFailed(true);
 
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setSheriffFailed(false);
       }, 2500);
 
@@ -703,6 +712,10 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   socket.on("disableUI", (data) => {
     console.log(data.message);
+  });
+
+  socket.on("voteStarted", () => {
+    setVoteButton(true);
   });
 
   socket.on("dayStarted", () => {
@@ -1043,6 +1056,23 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     );
   };
 
+  const StartVote = () => {
+    const handleClick = () => {
+      startVote(roomId);
+    };
+
+    return (
+      <Tooltip text={"Начать голосование"}>
+        <button
+          className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faMark} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
+
   const EndVote = () => {
     const handleClick = () => {
       // checkRoleDonAndDisableUI();
@@ -1055,7 +1085,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
           onClick={handleClick}
         >
-          <FontAwesomeIcon icon={faGun} className="text-white text-xl" />
+          <FontAwesomeIcon icon={faX} className="text-white text-xl" />
         </button>
       </Tooltip>
     );
@@ -1198,15 +1228,20 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         {isOpen && (
           <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                  onClick={() => handleVote(roomId, player.id)}
-                >
-                  {player.username}
-                </li>
-              ))}
+              {players
+                .filter((player) => player.role !== "showman")
+                .map((player) => (
+                  <li
+                    key={player.id}
+                    onClick={() => handleKickPlayer(roomId, player.id)}
+                    className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  >
+                    <span className="text-primary-light mr-2">
+                      {player.cameraPlayerNumber}
+                    </span>
+                    {player.username}
+                  </li>
+                ))}
             </ul>
           </div>
         )}
@@ -1238,15 +1273,20 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         {isOpen && (
           <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                  onClick={() => handleClick(roomId, player.id)}
-                >
-                  {player.username}
-                </li>
-              ))}
+              {players
+                .filter((player) => player.role !== "showman")
+                .map((player) => (
+                  <li
+                    key={player.id}
+                    onClick={() => handleKickPlayer(roomId, player.id)}
+                    className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  >
+                    <span className="text-primary-light mr-2">
+                      {player.cameraPlayerNumber}
+                    </span>
+                    {player.username}
+                  </li>
+                ))}
             </ul>
           </div>
         )}
@@ -1277,15 +1317,20 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         {isOpen && (
           <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
-              {players.map((player) => (
-                <li
-                  key={player.id}
-                  onClick={() => handleKickPlayer(roomId, player.id)}
-                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                >
-                  {player.username}
-                </li>
-              ))}
+              {players
+                .filter((player) => player.role !== "showman")
+                .map((player) => (
+                  <li
+                    key={player.id}
+                    onClick={() => handleKickPlayer(roomId, player.id)}
+                    className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  >
+                    <span className="text-primary-light mr-2">
+                      {player.cameraPlayerNumber}
+                    </span>
+                    {player.username}
+                  </li>
+                ))}
             </ul>
           </div>
         )}
@@ -1550,7 +1595,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           <VotePlayerSelector />
         </>
       )}
-
       {role === "Don" && (
         <>
           {sheriffFailed && (
@@ -1679,7 +1723,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             <VotePlayerSelector />
           </>
         )}
-
         {role === "Don" && (
           <>
             {sheriffSucceed && (
@@ -1716,6 +1759,11 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         {showPopup && <Popup whichTime={time} mafia={mafia} />}
         <MicBTN />
         <WebCamBTN />
+        {voteButton && (
+          <>
+            <VotePlayerSelector />
+          </>
+        )}
         <LeaveBTN />
       </div>
       <div className="flex items-center justify-center">
