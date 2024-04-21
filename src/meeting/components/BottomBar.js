@@ -65,6 +65,7 @@ import { useWakeUpMafia } from "../../hooks/useWakeUpMafia";
 import { useWakeUpSheriff } from "../../hooks/useWakeUpSheriff";
 import { useDetectSheriff } from "../../hooks/useDetectSheriff";
 import { useEndVote } from "../../hooks/useEndVote";
+
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
 
@@ -219,9 +220,11 @@ const MicBTN = () => {
     });
     setTooltipShow(true);
   };
+
   const closeTooltip = () => {
     setTooltipShow(false);
   };
+
   return (
     <>
       <OutlinedButton
@@ -549,6 +552,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [time, setTime] = useState();
   const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [sheriffFailed, setSheriffFailed] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isDead, setIsDead] = useState(false);
@@ -558,6 +562,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   roomId = roomId.replace(/"/g, "");
   roomId = parseInt(roomId, 10);
+
   const communicateWithDon = () => {
     if (userDataObject && userDataObject.role !== "Don") {
       setIsDisabled(true);
@@ -575,6 +580,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       socket.off("kicked");
     };
   }, []);
+
   useEffect(() => {
     socket.on("killed", (data) => {
       setIsDead(true);
@@ -635,6 +641,28 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       setIsDisabled(false);
     }
   });
+
+  socket.on("sheriffDetected", (data) => {});
+
+  useEffect(() => {
+    const handleSheriffNotDetected = (data) => {
+      setSheriffFailed(true);
+
+      const timer = setTimeout(() => {
+        setSheriffFailed(false);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    };
+
+    socket.on("sheriffNotDetected", handleSheriffNotDetected);
+
+    return () => {
+      socket.off("sheriffNotDetected", handleSheriffNotDetected);
+      clearTimeout(timer);
+    };
+  }, []);
+
   socket.on("wakeUpDon", (data) => {
     console.log("Don wake up!");
   });
@@ -1473,7 +1501,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           </span>
         </div>
       )}
-
       {userDataString.role == "showman" && (
         <>
           <DayButton />
@@ -1505,8 +1532,16 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           <VotePlayerSelector />
         </>
       )}
+
       {role === "Don" && (
         <>
+          {sheriffFailed && (
+            <>
+              <div className="absolute top-8  left-0 m- mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+                Нет, это не Шериф!
+              </div>
+            </>
+          )}
           <DetectSheriffButton />
           <VotePlayerSelector />
         </>
@@ -1594,6 +1629,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   ) : (
     <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidde">
       <MeetingIdCopyBTN />
+
       {userDataString.role !== "showman" && (
         <>
           <RoleTab role={role} />
@@ -1625,8 +1661,22 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             <VotePlayerSelector />
           </>
         )}
+        {sheriffFailed && (
+          <>
+            <div className="absolute top-8 mb-4 left-[50%] translate-[-50%, 0] w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+              Нет, это не Шериф!
+            </div>
+          </>
+        )}
         {role === "Don" && (
           <>
+            {sheriffFailed && (
+              <>
+                <div className="absolute top-8 mb-4 left-[50%] translate-[-50%, 0] w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+                  Нет, это не Шериф!
+                </div>
+              </>
+            )}
             <DetectSheriffButton />
             <VotePlayerSelector />
           </>

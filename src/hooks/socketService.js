@@ -4,7 +4,7 @@ const roomId = localStorage.getItem("roomId");
 const userDataParse = JSON.parse(userData);
 const roomIdParse = JSON.parse(roomId);
 
-export const socket = io("https://showtimeserver-production.up.railway.app", {
+export const socket = io("http://localhost:4200", {
   path: "/sockets/",
   query: {
     userId: userDataParse?.id,
