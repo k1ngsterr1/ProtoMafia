@@ -54,6 +54,7 @@ import { useKickPlayer } from "../../hooks/useKickPlayer";
 import { useStartGame } from "../../hooks/useStartGame";
 import { useVotePlayer } from "../../hooks/useVotePlayer";
 import { useDetectMafia } from "../../hooks/useDetectMafia";
+import { useGetVotedPlayers } from "../../hooks/useGetVotedPlayers";
 import Cookies from "js-cookie";
 import { useGetRole } from "../../hooks/useGetRole";
 import { useSendFall } from "../../hooks/useSendFall";
@@ -537,6 +538,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const detectMafia = useDetectMafia();
   const detectSheriff = useDetectSheriff();
   const sendFall = useSendFall();
+  const votedPlayers = useGetVotedPlayers();
   const killPlayer = useKillPlayer();
   const startNight = useStartNight();
   const wakeUpMafia = useWakeUpMafia();
@@ -554,7 +556,10 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isDead, setIsDead] = useState(false);
+  const [isMafia, setIsMafia] = useState(false);
   const [isUIDisabled, setUIDisabled] = useState(false);
+  const [mafiaSucceed, setMafiaSucceed] = useState(false);
+  const [mafiaFailed, setMafiaFailed] = useState(false);
   const votePlayer = useVotePlayer();
   const endVote = useEndVote();
   const redirectToHome = () => {
@@ -578,9 +583,18 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     };
   }, []);
   useEffect(() => {
-    socket.on("killed", (data) => {
+    const handleIsDead = () => {
       setIsDead(true);
+
+      const timer = setTimeout(() => {
+        setIsDead(false);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    };
+    socket.on("killed", (data) => {
       window.location.href = "https://mafshow.kz";
+      handleIsDead;
     });
 
     return () => {
@@ -610,14 +624,60 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   //   });
   // }, []);
 
+  useEffect(() => {
+    const handleMafiaDetected = () => {
+      if(role === "Sheriff"){
+        setMafiaSucceed(true);
+      }
+
+      const timer = setTimeout(() => {
+        setMafiaSucceed(false);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    };
+
+    socket.on("mafiaDetected", handleMafiaDetected);
+
+    return () => {
+      // socket.off("mafiaDetected", handleMafiaDetected);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleMafiaNotDetected = () => {
+      if(role === "Sheriff"){
+        setMafiaFailed(true);
+      }
+
+      const timer = setTimeout(() => {
+        setMafiaFailed(false);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    };
+
+    socket.on("mafiaNotDetected", handleMafiaNotDetected);
+
+    return () => {
+      // socket.off("mafiaNotDetected", handleMafiaNotDetected);
+    };
+  }, []);
+
   socket.on("nightStarted", () => {
     console.log("Night has begun. Everyone should wait.");
     setIsDisabled(true);
+    setIsMafia(false);
+    setMafiaFailed(false);
+    setMafiaSucceed(false);
   });
 
   socket.on("dayStarted", () => {
     console.log("Day is here!");
     setIsDisabled(false);
+    setIsMafia(false);
+    setMafiaFailed(false);
+    setMafiaSucceed(false);
   });
 
   socket.on("wakeUpMafia", (data) => {
@@ -1000,6 +1060,22 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Tooltip>
     );
   };
+  const GetVotedPlayers = () => {
+    const handleClick = () => {
+      votedPlayers(roomId);
+    };
+
+    return (
+      <Tooltip text={"Показать проголосованных игроков"}>
+        <button
+          className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
+          onClick={handleClick}
+        >
+          <FontAwesomeIcon icon={faGun} className="text-white text-xl" />
+        </button>
+      </Tooltip>
+    );
+  };
 
   const EndVote = () => {
     const handleClick = () => {
@@ -1021,7 +1097,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const SheriffButton = () => {
     const handleClick = () => {
-      wakeUpSheriff();
+      wakeUpSheriff(roomId);
       // checkRoleSheriffAndDisableUI();
     };
 
@@ -1343,14 +1419,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const MafiaSelectorForSheriff = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);  // Tracks whether a selection has been made
+    const [isClicked, setIsClicked] = useState(false);
 
-    // Function to handle the detection of a mafia member
     const handleDetectMafia = (roomId, playerId) => {
-        if (!isClicked) {  // Ensure the detection can only happen once
+        if (!isClicked) {
             detectMafia(roomId, playerId);
-            setIsClicked(true);  // Prevent further selections
-            setIsOpen(false);    // Close the dropdown after selection
+            setIsClicked(true);
+            setIsOpen(false);
         }
     };
 
@@ -1373,8 +1448,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             )}
             <button
                 className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-                onClick={() => !isClicked && setIsOpen(!isOpen)}  // Only toggle if no selection has been made
-                disabled={isClicked} // Disable the button after a selection has been made
+                onClick={() => setIsOpen(!isOpen)} 
+                disabled={isClicked}
             >
                 <span>Выберите мафиози</span>
                 <FontAwesomeIcon
@@ -1457,7 +1532,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     { icon: BottomBarButtonTypes.PARTICIPANTS },
     { icon: BottomBarButtonTypes.MEETING_ID_COPY },
   ];
-
+  const handleClosePopupIsMafia = () => setIsMafia(false);
   return isMobile || isTab ? (
     <div
       className="flex items-center justify-center"
@@ -1472,6 +1547,21 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           </span>
         </div>
       )}
+      {mafiaSucceed && (
+        <div className="left-[50%] translate-[-50%, 0] absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+          <>Вы нашли мафию</>
+        </div>
+      )}
+      {mafiaFailed && (
+        <div className="left-[50%] translate-[-50%, 0] absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+          <>Вы нашли мирного</>
+        </div>
+      )}
+      {isDead && (
+        <div className="left-[50%] translate-[-50%, 0] absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+          <>Вы мертвы!</>
+        </div>
+      )}
 
       {userDataString.role == "showman" && (
         <>
@@ -1483,6 +1573,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           {/* <StartButton /> */}
           <PlayerSelector />
           <KickSelector />
+          <GetVotedPlayers/>
           <EndVote />
         </>
       )}
@@ -1605,6 +1696,21 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           </span>
         </div>
       )}
+      {mafiaSucceed && (
+        <div className="left-[50%] translate-[-50%, 0] absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+          <>Вы нашли мафию</>
+        </div>
+      )}
+      {mafiaFailed && (
+        <div className="left-[50%] translate-[-50%, 0] absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+          <>Вы нашли мирного</>
+        </div>
+      )}
+      {isDead && (
+        <div className="left-[50%] translate-[-50%, 0] absolute top-8 mb-4 w-48 py-2 font-killbill z-1000 rounded-lg text-primary-light text-3xl text-center bg-primary-dark border-2 border-primary-red pt-4 pb-4">
+          <>Вы мертвы!</>
+        </div>
+      )}
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         <RecordingBTN />
         {role === "Sheriff" && (
@@ -1640,6 +1746,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             {/* <StartButton /> */}
             <PlayerSelector />
             <KickSelector />
+            <GetVotedPlayers/>
             <EndVote />
           </>
         )}

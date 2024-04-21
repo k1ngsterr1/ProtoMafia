@@ -5,7 +5,7 @@ export const useEndVote = () => {
 
     try {
       const response = await axios.post(
-        `https://showtimeserver-production.up.railway.app/api/game/end-vote/${roomId}`
+        `http://localhost:4200/api/game/end-vote/${roomId}`
       );
 
       console.log("Data from ending vote", response.data);
