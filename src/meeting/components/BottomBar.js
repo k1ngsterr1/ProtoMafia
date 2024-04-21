@@ -43,6 +43,7 @@ import {
   faHatCowboy,
   faMoon,
   faPerson,
+  faPlay,
   faShield,
   faSun,
   faX,
@@ -1067,7 +1068,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
           onClick={handleClick}
         >
-          <FontAwesomeIcon icon={faMark} className="text-white text-xl" />
+          <FontAwesomeIcon icon={faPlay} className="text-white text-xl" />
         </button>
       </Tooltip>
     );
@@ -1753,6 +1754,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             {/* <StartButton /> */}
             <PlayerSelector />
             <KickSelector />
+            <StartVote />
             <EndVote />
           </>
         )}
