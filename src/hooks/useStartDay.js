@@ -4,7 +4,7 @@ export const useStartDay = () => {
   const startDay = async (roomId) => {
     try {
       const response = await axios.post(
-        `https://showtimeserver-production.up.railway.app/api/game/${roomId}/startDay`
+        `http://localhost:4200/api/game/${roomId}/startDay`
       );
 
       console.log("Data from the night:", response.data);
