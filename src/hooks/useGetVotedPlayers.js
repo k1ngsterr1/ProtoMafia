@@ -4,7 +4,7 @@ export const useGetVotedPlayers = () => {
   const votedPlayers = async (roomId) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/${roomId}/voted-users`
+        `https://showtimeserver-production.up.railway.app/api/game/${roomId}/voted-users`
       );
       console.log(response.data);
     } catch (error) {

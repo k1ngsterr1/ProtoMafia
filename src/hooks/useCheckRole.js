@@ -7,7 +7,7 @@ export function useCheckRole() {
   const checkRole = async (roomId, userId, targetRole) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/check-role/${roomId}/${userId}`,
+        `https://showtimeserver-production.up.railway.app/api/game/check-role/${roomId}/${userId}`,
         {
           targetRole: targetRole,
         }

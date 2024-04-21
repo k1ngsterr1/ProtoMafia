@@ -9,7 +9,7 @@ export const useSendFall = () => {
       console.log(roomId, playerId);
 
       const response = await axios.post(
-        `http://localhost:4200/api/game/warn/${roomId}/user/${playerId}`,
+        `https://showtimeserver-production.up.railway.app/api/game/warn/${roomId}/user/${playerId}`,
         {},
         {
           headers: {

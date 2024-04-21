@@ -4,7 +4,7 @@ export const useKillPlayer = () => {
   const killPlayer = async (roomId, playerId) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/kill/${playerId}/${roomId}`
+        `https://showtimeserver-production.up.railway.app/api/game/kill/${playerId}/${roomId}`
       );
       console.log("Data from kill the player from the game:", response.data);
     } catch (error) {
