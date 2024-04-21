@@ -2,11 +2,12 @@ import axios from "axios";
 
 import { socket } from "./socketService";
 
-export const useKickPlayer = () => {
-  const kickPlayer = async (roomId, userId) => {
+export const useChoosePlayer = () => {
+  const choosePlayer = async (roomId, userId) => {
+
     try {
       const response = await axios.post(
-        `https://showtimeserver-production.up.railway.app/api/game/disconnect/${roomId}/${userId}`
+        `http://localhost:4200/api/game/${roomId}/choose/${userId}`
       );
 
       console.log("Data from kick the player from the game:", response.data);
@@ -15,5 +16,5 @@ export const useKickPlayer = () => {
     }
   };
 
-  return kickPlayer;
+  return choosePlayer;
 };
