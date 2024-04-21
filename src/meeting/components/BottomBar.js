@@ -551,6 +551,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const [showPopup, setShowPopup] = useState(false);
   const [mafia, setMafiaTime] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isDead, setIsDead] = useState(false);
   const [isUIDisabled, setUIDisabled] = useState(false);
   const votePlayer = useVotePlayer();
   const endVote = useEndVote();
@@ -576,8 +577,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   }, []);
   useEffect(() => {
     socket.on("killed", (data) => {
-      alert(data.message);
-      setIsDisabled(true);
+      setIsDead(true);
       window.location.href = "https://mafshow.kz";
     });
 
@@ -1035,15 +1035,32 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const KillPlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handlePlayerSelection = (roomId, playerId) => {
+      if (!isClicked) {
+        killPlayer(roomId, playerId);
+        setIsClicked(true);
+        setIsOpen(false);
+      }
+    };
+
+    const eligiblePlayers = players.filter(
+      (player) =>
+        player.gameRole !== "Showman" &&
+        player.gameRole !== "Mafia" &&
+        player.gameRole !== "Don"
+    );
+
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+          <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
-              {players.map((player) => (
+              {eligiblePlayers.map((player) => (
                 <li
                   key={player.id}
-                  onClick={() => killPlayer(roomId, player.id)}
+                  onClick={() => handlePlayerSelection(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -1055,6 +1072,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         <button
           className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
           onClick={() => setIsOpen(!isOpen)}
+          disabled={false} // Always allow toggling the dropdown
         >
           <span>Убить игрока</span>
           <FontAwesomeIcon
@@ -1068,15 +1086,32 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const DetectSheriffButton = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const eligiblePlayers = players.filter(
+      (player) =>
+        player.gameRole !== "Showman" &&
+        player.gameRole !== "Mafia" &&
+        player.gameRole !== "Don"
+    );
+
+    const handleSheriffDetection = (roomId, playerId) => {
+      if (!isClicked) {
+        detectSheriff(roomId, playerId);
+        setIsClicked(true);
+        setIsOpen(false);
+      }
+    };
+
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+          <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
-              {players.map((player) => (
+              {eligiblePlayers.map((player) => (
                 <li
                   key={player.id}
-                  onClick={() => detectSheriff(roomId, player.id)}
+                  onClick={() => handleSheriffDetection(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -1088,6 +1123,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         <button
           className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
           onClick={() => setIsOpen(!isOpen)}
+          disabled={isClicked}
         >
           <span>Найти Шерифа</span>
           <FontAwesomeIcon
@@ -1101,17 +1137,26 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const VotePlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleVote = (roomId, playerId) => {
+      if (!isClicked) {
+        votePlayer(roomId, playerId);
+        setIsClicked(true);
+        setIsOpen(false);
+      }
+    };
 
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+          <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
               {players.map((player) => (
                 <li
                   key={player.id}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                  onClick={() => votePlayer(roomId, player.id)}
+                  onClick={() => handleVote(roomId, player.id)}
                 >
                   {player.username}
                 </li>
@@ -1122,6 +1167,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         <button
           className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
           onClick={() => setIsOpen(!isOpen)}
+          disabled={isClicked}
         >
           <span>Проголосовать</span>
           <FontAwesomeIcon
@@ -1175,15 +1221,20 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const KickSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const handleKickPlayer = (roomId, playerId) => {
+      kickPlayer(roomId, playerId);
+      setIsOpen(false);
+    };
+
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+          <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
               {players.map((player) => (
                 <li
                   key={player.id}
-                  onClick={() => kickPlayer(roomId, player.id)}
+                  onClick={() => handleKickPlayer(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -1210,7 +1261,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     const handleClick = () => {
       setTime("Night");
       setShowPopup(true);
-      startNight();
+      startNight(roomId);
       setTimeout(() => setShowPopup(false), 2500);
     };
 
@@ -1229,7 +1280,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const DayButton = () => {
     const handleClick = () => {
       setTime("Day");
-      startDay();
+      startDay(roomId);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 2500);
     };
@@ -1275,7 +1326,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const MafiaButton = () => {
     const handleClick = () => {
-      wakeUpMafia();
+      wakeUpMafia(roomId);
     };
 
     return (
@@ -1292,16 +1343,27 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const MafiaSelectorForSheriff = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false); // Tracks whether a selection has been made
+
+    // Function to handle the detection of a mafia member
+    const handleDetectMafia = (roomId, playerId) => {
+      if (!isClicked) {
+        // Ensure the detection can only happen once
+        detectMafia(roomId, playerId);
+        setIsClicked(true); // Prevent further selections
+        setIsOpen(false); // Close the dropdown after selection
+      }
+    };
 
     return (
-      <div className="relative inline-block bg-gray-750  rounded-lg border-2 border-[#ffffff33]">
+      <div className="relative inline-block bg-gray-750 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
-          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+          <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
               {players.map((player) => (
                 <li
                   key={player.id}
-                  onClick={() => detectMafia(roomId, player.id)}
+                  onClick={() => handleDetectMafia(roomId, player.id)}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                 >
                   {player.username}
@@ -1312,7 +1374,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         )}
         <button
           className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => !isClicked && setIsOpen(!isOpen)} // Only toggle if no selection has been made
+          disabled={isClicked} // Disable the button after a selection has been made
         >
           <span>Выберите мафиози</span>
           <FontAwesomeIcon
@@ -1404,12 +1467,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       <LeaveBTN />
       <MicBTN />
       {isDisabled && userDataString.role !== "showman" && (
-        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center">
+        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center !z-[100000000000000000000000000000000000000]">
           <span className="text-primary-red font-killbill text-5xl">
             Сейчас ночь...
           </span>
         </div>
       )}
+
       {userDataString.role == "showman" && (
         <>
           <DayButton />
@@ -1536,7 +1600,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         </>
       )}
       {isDisabled && userDataString.role !== "showman" && (
-        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center">
+        <div className="bg-black w-full h-full absolute top-0 flex items-center justify-center !z-[100000000000000000000000000000000000000]">
           <span className="text-primary-red font-killbill text-5xl">
             Сейчас ночь...
           </span>
