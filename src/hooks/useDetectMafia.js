@@ -4,7 +4,7 @@ export const useDetectMafia = () => {
   const detectMafia = async (roomId, userId) => {
     try {
       const response = await axios.post(
-        `https://showtimeserver-production.up.railway.app/api/game/detect/${roomId}/mafia/${userId}`
+        `http://localhost:4200/api/game/detect/${roomId}/mafia/${userId}`
       );
 
       console.log("Data from detecting the player:", response.data);
