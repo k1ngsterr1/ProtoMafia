@@ -4,7 +4,7 @@ export const useGetChosen = () => {
   const chosenPlayers = async (roomId) => {
     try {
       const response = await axios.post(
-        `http://localhost:4200/api/game/${roomId}/chosen`
+        `https://showtimeserver-production.up.railway.app/api/game/${roomId}/chosen`
       );
       console.log(response.data);
     } catch (error) {

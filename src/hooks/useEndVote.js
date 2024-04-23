@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const useEndVote = () => {
   const endVote = async (roomId) => {
-
     try {
       const response = await axios.post(
         `https://showtimeserver-production.up.railway.app/api/game/end-vote/${roomId}`
