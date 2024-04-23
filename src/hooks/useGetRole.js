@@ -9,7 +9,7 @@ export function useGetRole() {
 
     try {
       const response = await axios.get(
-        `http://localhost:4200/api/game/get-role/${roomId}/${userId}`
+        `https://showtimeserver-production.up.railway.app/api/game/get-role/${roomId}/${userId}`
       );
 
       setRole(response.data.user.gameRole);

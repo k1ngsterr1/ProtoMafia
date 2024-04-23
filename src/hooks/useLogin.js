@@ -4,7 +4,7 @@ export const useLogin = () => {
   const login = async (loginData) => {
     try {
       const response = await axios.post(
-        "http://localhost:4200/api/auth/login",
+        "https://showtimeserver-production.up.railway.app/api/auth/login",
         loginData
       );
 
