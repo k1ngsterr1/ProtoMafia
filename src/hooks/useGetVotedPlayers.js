@@ -1,16 +1,24 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-export const useGetVotedPlayers = () => {
-  const votedPlayers = async (roomId) => {
-    try {
-      const response = await axios.post(
-        `https://showtimeserver-production.up.railway.app/api/game/${roomId}/voted-users`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("There was an error with starting the game:", error);
-    }
-  };
+export const useGetVotedPlayers = (roomId) => {
+  const [votedPlayersList, setVotedPlayersList] = useState([]);
 
-  return votedPlayers;
+  useEffect(() => {
+    const votedPlayers = async () => {
+      try {
+        const response = await axios.get(
+          `https://showtimeserver-production.up.railway.app/api/game/${roomId}/voted-users`
+        );
+        console.log(response.data, "there is data from voted players");
+        setVotedPlayersList(response.data.users);
+      } catch (error) {
+        console.error("There was an error with getting voted players:", error);
+      }
+    };
+
+    votedPlayers();
+  }, [roomId]);
+
+  return { votedPlayersList };
 };

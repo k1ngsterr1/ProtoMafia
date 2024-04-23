@@ -5,8 +5,6 @@ export function useGetRole() {
   const [role, setRole] = useState();
 
   const getRole = async (roomId, userId) => {
-    console.log("get role:", roomId, userId);
-
     try {
       const response = await axios.get(
         `https://showtimeserver-production.up.railway.app/api/game/get-role/${roomId}/${userId}`

@@ -546,13 +546,12 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const detectMafia = useDetectMafia();
   const detectSheriff = useDetectSheriff();
   const sendFall = useSendFall();
-  const votedPlayers = useGetVotedPlayers();
   const choosePlayer = useChoosePlayer();
   const killPlayer = useKillPlayer();
   const startNight = useStartNight();
   const wakeUpMafia = useWakeUpMafia();
   const wakeUpSheriff = useWakeUpSheriff();
-  const getChosenPlayers = useGetChosen();
+  const { chosenPlayersList, getChosenPlayers } = useGetChosen(roomIdString);
   const wakeUpDon = useWakeUpDon();
   const startDay = useStartDay();
   const startGame = useStartGame();
@@ -560,6 +559,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
   const checkRole = useCheckRole();
   const { getRole, role } = useGetRole();
   const { players } = useGetPlayers(roomIdString);
+  const { votedPlayersList } = useGetVotedPlayers(roomIdString);
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
   const [time, setTime] = useState();
   const [isBlackRectangleVisible, setIsBlackRectangleVisible] = useState(false);
@@ -597,6 +597,15 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       socket.off("kicked");
     };
   }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getChosenPlayers();
+      console.log("updated!");
+    }, 15000); // 15000 milliseconds = 15 seconds
+
+    return () => clearInterval(intervalId);
+  }, [getChosenPlayers]);
 
   useEffect(() => {
     const handleIsDead = () => {
@@ -794,7 +803,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   useEffect(() => {
     getRole(roomId, userDataString.id);
-  });
+  }, [roomId]);
 
   useEffect(() => {
     socket.on("userWarned", (data) => {
@@ -1138,20 +1147,47 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Tooltip>
     );
   };
-  const GetVotedPlayers = () => {
+
+  const VotedPlayerSelector = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
     const handleClick = () => {
-      votedPlayers(roomId);
+      useGetVotedPlayers(roomId);
     };
 
     return (
-      <Tooltip text={"Показать заголосованных игроков"}>
+      <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
+        {isOpen && (
+          <div className="absolute bottom-full mb-1 w-full rounded-md  bg-gray-700 max-h-40 overflow-auto">
+            <ul className="text-white">
+              {votedPlayersList
+                .filter((player) => player.role !== "showman")
+                .map((player) => (
+                  <li
+                    key={player.id}
+                    onClick={() => handleKickPlayer(roomId, player.id)}
+                    className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  >
+                    <span className="text-primary-light mr-2">
+                      {player.cameraPlayerNumber}
+                    </span>
+                    {player.username}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
         <button
-          className="bg-gray-750 ml-2 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50"
-          onClick={handleClick}
+          className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
+          onClick={() => setIsOpen(!isOpen)}
         >
-          <FontAwesomeIcon icon={faList} className="text-white text-xl" />
+          <span>Получить заголосованных игроков</span>
+          <FontAwesomeIcon
+            icon={isOpen ? faChevronDown : faChevronUp}
+            className="text-xs"
+          />
         </button>
-      </Tooltip>
+      </div>
     );
   };
 
@@ -1190,11 +1226,13 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Tooltip>
     );
   };
+
   const ChoosePlayer = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleChoosePlayer = (roomId, playerId) => {
       choosePlayer(roomId, playerId);
+      console.log("aaa");
       setIsOpen(false);
     };
 
@@ -1337,9 +1375,18 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   const VotePlayerSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [fetchDataOnOpen, setFetchDataOnOpen] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
 
-    const handleVote = (roomId, playerId) => {
+    // useEffect(() => {
+    //   if (isOpen) {
+    //     // getChosenPlayers();
+    //   }
+    // }, [isOpen]);
+
+    const handleVote = (roomId, playerId, event) => {
+      event.stopPropagation();
+
       if (!isClicked) {
         votePlayer(roomId, playerId);
         setIsClicked(true);
@@ -1347,20 +1394,22 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       }
     };
 
-    const eligiblePlayers = players.filter(
-      (player) => player.isChosen === true
-    );
+    const toggleDropdown = (event) => {
+      event.stopPropagation();
+      // getChosenPlayers();
+      setIsOpen(!isOpen);
+    };
 
     return (
       <div className="relative inline-block bg-gray-750 ml-2 rounded-lg border-2 border-[#ffffff33]">
         {isOpen && (
           <div className="absolute bottom-full mb-1 w-full rounded-md bg-gray-700 max-h-40 overflow-auto">
             <ul className="text-white">
-              {eligiblePlayers.map((player) => (
+              {chosenPlayersList.map((player) => (
                 <li
                   key={player.id}
                   className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                  onClick={() => handleVote(roomId, player.id)}
+                  onClick={(event) => handleVote(roomId, player.id, event)}
                 >
                   {player.username}
                 </li>
@@ -1370,7 +1419,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         )}
         <button
           className="bg-gray-750 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={(event) => toggleDropdown(event)}
           disabled={isClicked}
         >
           <span>Проголосовать</span>
@@ -1470,6 +1519,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </div>
     );
   };
+
   const GetChosenButton = () => {
     const handleClick = () => {
       getChosenPlayers(roomId);
@@ -1481,7 +1531,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           className="bg-gray-750 p-2 pl-3 pr-3 rounded-lg border-2 border-[#ffffff33] hover:outline-none hover:border-white focus:ring-2 focus:ring-opacity-50 ml-2"
           onClick={handleClick}
         >
-          <FontAwesomeIcon icon={faMoon} className="text-white text-xl" />
+          <FontAwesomeIcon icon={faPerson} className="text-white text-xl" />
         </button>
       </Tooltip>
     );
@@ -1722,6 +1772,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     { icon: BottomBarButtonTypes.PARTICIPANTS },
     { icon: BottomBarButtonTypes.MEETING_ID_COPY },
   ];
+
   const handleClosePopupIsMafia = () => setIsMafia(false);
   return isMobile || isTab ? (
     <div
@@ -1763,7 +1814,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           {/* <StartButton /> */}
           <PlayerSelector />
           <KickSelector />
-          <GetVotedPlayers />
+          <VotedPlayerSelector />
           <ChoosePlayer />
           <GetChosenButton />
           <EndVote />
@@ -1960,7 +2011,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             {/* <StartButton /> */}
             <PlayerSelector />
             <KickSelector />
-            <GetVotedPlayers />
+            <VotedPlayerSelector />
             <ChoosePlayer />
             <GetChosenButton />
             <EndVote />
